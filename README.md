@@ -1,6 +1,7 @@
 1. Made week 1
-	1.1 Made days and a file in every day folder
 
-2. Made week-02 folder.
+2. Made days and a file in every day folder
 
-3. Made readme
+3. Made week-02 folder.
+
+4. Made readme
