@@ -15,26 +15,29 @@ create a program which draws a diamond, like this:
     * * *
       *
 */
-int c, r;
+int c, r, a;
+printf("Add meg a csillagok max szamat egy sorban: ");
+scanf ("%d", &a);
 
-    for ( c = 1 ; c <= 7 ; c++ )
+    for ( c = 1 ; c <= a ; c++ )
     {
-        for( r = 7 ; r >= c ; r-- )
+        for( r = a ; r >= c ; r-- )
             printf(" ");
         for( r = 1 ; r <= c ; r++ )
             printf("* ");
 
         printf("\n");
     }
-    for ( c = 7 ; c >= 1 ; c-- )
+    for ( c = a ; c >= 1 ; c-- )
     {
-        for( r = 7 ; r >= c ; r-- )
+        for( r = a ; r >= c ; r-- )
             printf(" ");
         for( r = 1 ; r <= c ; r++ )
             printf("* ");
 
         printf("\n");
     }
+
 
 
   return 0;
