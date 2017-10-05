@@ -9,3 +9,5 @@
 5. Added day 3 tasks
 
 6. Added day 4 tasks (2017.10.05.)
+
+7. Finished the diamond shaping project (with input field)(2017.10.05.)
