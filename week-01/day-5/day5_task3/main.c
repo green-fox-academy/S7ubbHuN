@@ -14,12 +14,12 @@ int main()
     scanf ("%d", &a);
     printf("Enter an ending number: \n");
     scanf ("%d", &b);
-    for (a=a, a<=b, a++)
-    {
+    printf("-------------------------\nThe odd numbers are: ");
+    for (a=a; a<=b; a++)
         if (a%2!=0)
         {
-        printf("%d\n",a);
+        printf("%d, ",a);
         }
-    }
+
     return 0;
 }
