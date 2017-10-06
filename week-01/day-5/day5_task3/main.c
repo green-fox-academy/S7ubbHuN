@@ -14,14 +14,14 @@ int main()
     scanf ("%d", &a1);
     printf("Enter an ending number: \n");
     scanf ("%d", &b);
-    printf("-------------------------\nThe odd numbers are: ");
+    printf("-------------------------\nThe odd number(s) are: ");
     for (a2=a1; a2<=b; a2++) {
-        if (a2%2!=0){
+        if (a2%2!=0) {
             printf("%d, ",a2);
             c++;
         }
     }
-    printf("\nThis is %d odd numbers, between %d and %d.", c, a1, b);
+    printf("\nThis is %d odd number(s), between %d and %d.", c, a1, b);
 
     return 0;
 }
