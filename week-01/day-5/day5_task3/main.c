@@ -9,7 +9,7 @@
 
 int main()
 {
-    int a, b;
+    int a, b, c=0;
     printf("Enter a starting number: \n");
     scanf ("%d", &a);
     printf("Enter an ending number: \n");
@@ -19,7 +19,9 @@ int main()
         if (a%2!=0)
         {
         printf("%d, ",a);
+        c++;
         }
+    printf("this is %d odd numbers.", c);
 
     return 0;
 }
