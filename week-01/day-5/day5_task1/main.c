@@ -5,8 +5,11 @@ int main()
 {
     char abc, ABC;
     for(abc = 'a'; abc <= 'z'; abc++)
-        printf("%c ", abc);
-    for(ABC = 'A'; ABC <= 'Z'; ABC++)
-        printf("%c ", ABC);
+        {
+            ABC=abc-32;
+            printf("%c%c ", abc,ABC);
+        }
+
     return 0;
+
 }
