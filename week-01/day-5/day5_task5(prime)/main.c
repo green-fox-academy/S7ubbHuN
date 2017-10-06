@@ -19,16 +19,17 @@ output :
     printf("Enter an ending number: \n");
     scanf ("%d", &end);
     printf("-------------------------\nThe prime number(s) are: ");
-    for (a=strt; a=end; a++) {
+    for (a=strt; a<=end; a++) {
         for (a2=1; a2<=a; a2++) {
             if (a%a2==0){
                 cnt++;
             }
         }
         if (cnt==2) {
-            printf("%d, ",a2);
+            printf("%d, ",a);
             b++;
-            }
+        }
+        cnt=0;
     }
     printf("\nThis is %d prime number(s), between %d and %d.", b, strt, end);
     return 0;
