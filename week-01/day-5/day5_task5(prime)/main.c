@@ -20,7 +20,7 @@ output :
     scanf ("%d", &end);
     printf("-------------------------\nThe prime number(s) are: ");
     for (a = strt; a <= end; a++) {
-        for (a2 = 2; a2 <= a; a2++) {
+        for (a2 = 1; a2 <= a; a2++) {
             if (a % a2 == 0) {
                 cnt++;
                 if (cnt > 2)
