@@ -10,16 +10,17 @@ int main()
 
     num=onum;
     while (num!=0) {
-        num/=10;
+        num /= 10;
         digit++;
     }
-    rem=onum;
+
+    num=onum;
     while (num != 0) {
         rem = num%10;
         powsum += pow(rem, digit);
         num /= 10;
     }
-    if (powsum=onum){
+    if (powsum == onum){
         printf("This number is an Armstrong number!");
     }
     else {
