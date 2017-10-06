@@ -23,6 +23,9 @@ output :
         for (a2=1; a2<=a; a2++) {
             if (a%a2==0){
                 cnt++;
+                if (cnt>2){
+                    break;
+                }
             }
         }
         if (cnt==2) {
