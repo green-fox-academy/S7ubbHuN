@@ -15,7 +15,7 @@ int main()
     printf("Enter an ending number: \n");
     scanf ("%d", &b);
     printf("-------------------------\nThe odd numbers are: ");
-    for (a2=a1; a2<=b; a2++){
+    for (a2=a1; a2<=b; a2++) {
         if (a2%2!=0){
             printf("%d, ",a2);
             c++;
