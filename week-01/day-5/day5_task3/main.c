@@ -15,12 +15,12 @@ int main()
     printf("Enter an ending number: \n");
     scanf ("%d", &b);
     printf("-------------------------\nThe odd numbers are: ");
-    for (a2=a1; a2<=b; a2++)
-        if (a2%2!=0)
-        {
-        printf("%d, ",a2);
-        c++;
+    for (a2=a1; a2<=b; a2++){
+        if (a2%2!=0){
+            printf("%d, ",a2);
+            c++;
         }
+    }
     printf("\nThis is %d odd numbers, between %d and %d.", c, a1, b);
 
     return 0;
