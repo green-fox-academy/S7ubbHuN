@@ -8,7 +8,6 @@
 // until the given parameter which you store in a .h file
 
 int sum();
-
 int main()
 {
     scanf("%d", &numbers);
@@ -25,7 +24,7 @@ int main()
 
 }
 */
-int sum(numbers)
+int sum()
 {
     int j = 0, i = 0;
     for(i = 1; i <= numbers; i++) {
