@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1507559776 source:c:\users\sassb\greenfox\s7ubbhun\week-02\day-1\task4-greet\main.c
+1507565340 source:c:\users\sassb\greenfox\s7ubbhun\week-02\day-1\task4-greet\main.c
 	<stdio.h>
 	<stdlib.h>
 	"names.h"
 
-1507559969 c:\users\sassb\greenfox\s7ubbhun\week-02\day-1\task4-greet\names.h
+1507565356 c:\users\sassb\greenfox\s7ubbhun\week-02\day-1\task4-greet\names.h
 

@@ -1,2 +1,1 @@
-char a[] = "Greenfox";
-char b[] = "Bazsi";
+char names[][20] = { "Greenfox", "Bazsi", "Bator", "Adam", "Gergo", "Zsolti" };
