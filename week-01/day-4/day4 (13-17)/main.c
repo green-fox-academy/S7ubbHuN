@@ -3,10 +3,10 @@
 
 int main()
 {
-/*
+
     //17.feladat
 
-create a program which draws a diamond, like this:
+/*create a program which draws a diamond, like this:
       *
     * * *
   * * * * *
@@ -15,7 +15,7 @@ create a program which draws a diamond, like this:
   * * * * *
     * * *
       *
-
+*/
 int c, r, a;
 printf("Add meg a csillagok max szamat egy sorban: ");
 scanf ("%d", &a);
@@ -29,7 +29,7 @@ scanf ("%d", &a);
 
         printf("\n");
     }
-    for ( c = a ; c >= 1 ; c-- )
+    for ( c = a-1 ; c >= 1 ; c-- )
     {
         for( r = a ; r >= c ; r-- )
             printf(" ");
@@ -40,8 +40,8 @@ scanf ("%d", &a);
     }
     return 0;
 }
-*/
-    //16.feladat
+
+ /*   //16.feladat
 
 int gcd(int a, int b) {
   int t;
@@ -52,6 +52,6 @@ int gcd(int a, int b) {
   }
   return a;
   printf("%d", a);
-}
+}*/
 
-}
+
