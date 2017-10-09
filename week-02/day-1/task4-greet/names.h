@@ -1,1 +1,1 @@
-char names[][20] = { "Greenfox", "Bazsi", "Bator", "Adam", "Gergo", "Zsolti" };
+char names[][20] = { "Greenfox", "Bazsi", "Bator", "Adam", "Gergo", "Zsolti", "Sanyi", "Agi" };

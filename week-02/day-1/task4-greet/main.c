@@ -17,7 +17,8 @@ int main()
 void greet()
 {
     int i = 0;
-    for (i = 0; i < 6; i++){
+    int arraylength = sizeof names / sizeof (names[0]);
+    for (i = 0; i < arraylength; i++){
         printf("Hello %s, have a nice day!\n", names[i]);
     }
 }
