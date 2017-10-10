@@ -31,20 +31,16 @@ int main()
         if (pos < 1 | pos > ras) {
             printf("This is an invalid position");
             break;
-        }
-        else if (i < pos) {
-                arr[i] = i;
+        } else if (i < pos) {
+            arr[i] = i;
+            printf("%d, ", arr[i]);
+        } else if (i == pos) {
+            ras = ras - 1;
+            for(i = pos; i <= ras; i++) {
+                arr[i] = i + 1;
                 printf("%d, ", arr[i]);
-        }
-        else if (i == pos) {
-                ras = ras - 1;
-                for(i = pos; i <= ras; i++) {
-                    arr[i] = i + 1;
-                    printf("%d, ", arr[i]);
-                }
-
+            }
         }
     }
-
     return 0;
 }
