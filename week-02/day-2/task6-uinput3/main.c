@@ -12,9 +12,17 @@ int main()
     return 0;
 }
 
-void char_to_ascii()
+/*void char_to_ascii()
 {
     char chr = getch();
     printf("\n");
     printf("The %c character in ASCII is %d.", chr, chr);
+}*/
+void char_to_ascii()
+{
+    char chr = 0;
+    scanf("%c", &chr);
+    printf("\n");
+    printf("The %c character in ASCII is %d.", chr, chr);
 }
+
