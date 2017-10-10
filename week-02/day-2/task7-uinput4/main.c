@@ -14,5 +14,18 @@ int main()
 
 void func()
 {
+    int num = 0;
+    char str[255];
+
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    printf("\n");
+    printf("Your number is %d.\n", num);
+    fflush(stdin);
+    printf("Enter your name: ");
+    gets(str);
+    printf("\n");
+    printf("Your name is: ");
+    puts(str);
 
 }
