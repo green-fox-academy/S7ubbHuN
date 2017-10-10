@@ -31,13 +31,9 @@ int main()
         }
     }
     buffer2[i] = 0;
-
-
     //TODO:
     // Print it out
-
-    printf("Your pet's name is: ");
+    printf("\nYour pet's name is: ");
     puts(buffer2);
-
     return 0;
 }
