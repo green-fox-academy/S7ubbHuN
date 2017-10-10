@@ -18,7 +18,7 @@ int main()
     printf("\n");
     printf("The %c character in ASCII is %d.", chr, chr);
 }*/
-void char_to_ascii()
+int char_to_ascii()
 {
     char chr = 0;
     scanf("%c", &chr);
