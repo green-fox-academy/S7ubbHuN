@@ -35,7 +35,7 @@ int main()
             arr[i] = i;
             printf("%d, ", arr[i]);
         } else if (i == pos) {
-            ras = ras - 1;
+            //ras = ras - 1;
             for(i = pos; i <= ras; i++) {
                 arr[i] = i + 1;
                 printf("%d, ", arr[i]);
