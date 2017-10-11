@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 int main()
 {
@@ -8,10 +9,16 @@ int main()
     //print out the array
 
     int arr[50];
-    int i;
-
-    for (i = 200; i >= arr[i]; i--)
-            printf("%d ", arr[50]);
-            printf("\n");
+    int i = 0, j;
+    while (i < 50) {
+        for (j = 200; j >= INT_MIN; j--) {
+            if (j % 85 == 0) {
+                arr[i] = j;
+                printf("%d, ", arr[i]);
+                i++;
+                break;
+            }
+        }
+    }
     return 0;
 }
