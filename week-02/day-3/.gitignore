@@ -1,9 +1,11 @@
-+bin/
++Bin/
 +Debug/
 +Release/
++Obj/
 +*.o
 +*.out
 +*.depend
 +*.layout
 +*.exe
-+lab/
++Lab/
++*.cbp
