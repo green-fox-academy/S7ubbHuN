@@ -10,13 +10,16 @@ int main()
 
     int arr[50];
     int i = 0;
-    int j = 0;
-    for (i = 0, j = 200; i < 50; j--) {
+    int j = 200;
+    while (i < 50) {
         if (j % 85 == 0) {
             arr[i] = j;
             printf("%d, ", arr[i]);
             i++;
         }
+    j--;
     }
+
+
     return 0;
 }
