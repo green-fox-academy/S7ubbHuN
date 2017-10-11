@@ -7,9 +7,11 @@ int main()
     //but your array should contain elements which are divisible by 5 and 17
     //print out the array
 
-    int my_array[50];
-    aaa
+    int arr[50];
+    int i;
 
-
+    for (i = 200; i >= arr[i]; i--)
+            printf("%d ", arr[50]);
+            printf("\n");
     return 0;
 }
