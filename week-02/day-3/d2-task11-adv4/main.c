@@ -8,7 +8,7 @@ int main()
     //print out the array
 
     int my_array[50];
-
+    aaa
 
 
     return 0;
