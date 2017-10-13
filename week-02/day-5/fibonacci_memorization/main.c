@@ -12,16 +12,22 @@
 
 int main()
 {
-    printf("%d", fibonacci(number));
+    printf("Which Fibonacci number do you want to get? ");
+    scanf("%d", &number);
+    printf("The %d. number is : %d", number, fibonacci());
     return 0;
 }
 
-int fibonacci(int number)
+int fibonacci()
 {
-    if (number == 1) {
-        return 1;
-    } else if (number == 2) {
-        return 1;
-    } else
-        return fibonacci(number - 1) + fibonacci(number - 2);
+    int i;
+    int fibonacci[number+1];
+    fibonacci[0] = 0;
+    fibonacci[1] = 1;
+    for (i = 2; i <= number; i++) {
+        fibonacci[i] = fibonacci[i-1] + fibonacci[i-2];
+    }
+    return fibonacci[number];
 }
+
+
