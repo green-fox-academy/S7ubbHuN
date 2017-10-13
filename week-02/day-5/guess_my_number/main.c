@@ -28,16 +28,19 @@ int main()
     srand(time(NULL));
     int number = (rand() % (last_element - first_element)) + first_element;
     //printf("%d", number);
+
     while (lives > 0) {
     printf("You have %d lives left. Enter your guess:", lives);
     scanf("%d", &guess);
         if (guess == number) {
             printf("\nYou won! My number was: %d", number);
             break;
-        }
-        else {
-            printf("\nWrong!\n");
-            lives--;
+        } else if (guess > number) {
+                printf("\nWrong! Your guess is bigger than my number!\n");
+                lives--;
+        } else {
+                printf("\nWrong! Your guess is smaller than my number!\n");
+                lives--;
         }
     }
     return 0;
