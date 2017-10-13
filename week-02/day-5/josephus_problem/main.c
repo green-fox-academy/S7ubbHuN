@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int circle(int soldiers_number, int starting_pos)
+{
+    if (soldiers_number == 1) {
+        return soldiers_number;
+    }
+    else {
+        return (circle(soldiers_number - 1, starting_pos) + starting_pos-1) % soldiers_number + 1;
+    }
+}
+
 int main()
 {
     int soldiers_number, starting_pos;
@@ -16,10 +26,5 @@ int main()
     return 0;
 }
 
-int circle(soldiers_number, starting_pos)
-{
-    return (soldiers_number, starting_pos);
-
-}
 
 
