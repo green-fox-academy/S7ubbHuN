@@ -27,7 +27,7 @@ int main()
 
 	printf("I have a number between %d and %d. You have %d lives\n", rand_min, rand_max, x - 3);
 
-	for (count = 0; count < x - 1; count++) {
+	for (count = 0; count < x - 3; count++) {
 		printf("\n>");
 		scanf("%d", &guess);
 
@@ -35,18 +35,18 @@ int main()
 			if (guess == rand_num) {
 				printf("Yeeeeey, you did well! It took you %d tires!", count + 1);
 				break;
-			}
+			} else if (guess > rand_num) {
+                printf("Too big, You have %d, lives left\n", x - 4 - count);
+                break;
+			} else
+				printf("Too low, You have %d, lives left\n", x - 4 - count);
+				break;
 
-			if (guess > rand_num)
-				printf("Too big, You have %d, lives left\n", x - 3 - count);
-			else
-				printf("Too low, You have %d, lives left\n", x - 3 - count);
-		}
+		}printf("You have used all your lives!");
 
 	}
 
-	if (count = x)
-		printf("You have used all your lives!");
+
 
 	return 0;
 }
