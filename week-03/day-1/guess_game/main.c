@@ -31,9 +31,5 @@ int main()
 				break;
         }
     }
-    if (count == x-3) {
-        printf("You have used all your lives!");
-    }
-
-	return 0;
+    return 0;
 }

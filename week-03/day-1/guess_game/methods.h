@@ -7,10 +7,8 @@ int rand_num;
 
 void number_asking()
 {
-    printf("please add the minimum number!\n");
-    scanf("%d", &rand_min);
-    printf("please add the maximum number!\n");
-    scanf("%d", &rand_max);
+    printf("please add the minimum and the maximum number! (hit enter between them)\n");
+    scanf("%d %d", &rand_min, &rand_max);
 }
 
 int number_randomizing()
