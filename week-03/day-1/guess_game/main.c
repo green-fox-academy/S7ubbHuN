@@ -33,7 +33,7 @@ int main()
 
 		while (1) {
 			if (guess == rand_num) {
-				printf("Yeeeeey, you did well! It took you %d tires!", count + 1);
+				printf("Yeeeeey, you did well! It took you %d tries!", count + 1);
 				break;
 			} else if (guess > rand_num) {
                 printf("Too big, You have %d, lives left\n", x - 4 - count);
@@ -42,11 +42,12 @@ int main()
 				printf("Too low, You have %d, lives left\n", x - 4 - count);
 				break;
 
-		}printf("You have used all your lives!");
+		}
 
 	}
-
-
+    if (count == (x - 2)) {
+        printf("You have used all your lives!");
+    }
 
 	return 0;
 }
