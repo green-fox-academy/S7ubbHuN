@@ -6,6 +6,7 @@
 int main()
 {
 	float number, result;
+
 	printf("Please enter a number: ");
 	fflush(stdin);
 	scanf("%f", &number);
@@ -14,9 +15,11 @@ int main()
 	fflush(stdin);
 	scanf("%f", &result);
 
-	if (pow(number, 2) == result)
+    float square = pow(number, 2);
+
+	if (square == result) { //"if" only examine relations, doesnt count
 		printf(":)\n");
-	else
+	} else
 		printf(":(\n");
 
 	return 0;
