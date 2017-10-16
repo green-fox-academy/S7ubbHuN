@@ -21,6 +21,9 @@ int main()
 	int rand_num = rand() % (rand_max + 1 - rand_min) + rand_min;
 	y = rand_max - rand_min;
 	x = log10(y) / log10(2);
+	if (x < 4) {
+        x = 4;
+	}
 
 	printf("I have a number between %d and %d. You have %d lives\n", rand_min, rand_max, x - 3);
 
