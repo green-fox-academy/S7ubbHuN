@@ -9,6 +9,12 @@ int main()
 
     //TODO: make an integer to string conversion with itoa(), first in binary, then decimal format
     // Store the string in buffer
+    itoa(a, buffer, 2);
+    printf("%s\n", buffer);
+
+    itoa(a, buffer, 10);
+    printf("%s\n", buffer);
+
 
     return 0;
 }
