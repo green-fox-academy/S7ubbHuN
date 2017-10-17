@@ -1,8 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
 
 int main()
 {
-    printf("Hello world!\n");
+	double x = 1.2;
+
+    //TODO: write a program which adds up x and 1, and print out it rounded.
+
+    printf("X+1 rounded, is equal to %.f", x + 1);
+
+
     return 0;
 }
