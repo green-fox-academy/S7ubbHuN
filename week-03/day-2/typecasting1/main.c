@@ -7,8 +7,12 @@ main()
 	float f = 13.5, result;
 
 	//TODO: print out the f/i quotient
+	result = f / i;
+    printf("%f", result);
 
 	//QUESTION: do you need explicit conversion?
+
+	//no
 
 
 	return 0;
