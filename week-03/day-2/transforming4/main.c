@@ -19,7 +19,7 @@ int main()
     }
 
     //what do you see?
-    //dead ppl...
+    //dead ppl... :D cant copy a float array into an int
 
     return 0;
 }
