@@ -29,6 +29,6 @@ void calc_menu()
     printf("\n  help    Lists the menu again");
     printf("\n             ----------------------");
     printf("\n               Hit enter to start!");
-    printf("\n             ======================");
+    printf("\n             ======================\n");
 
 }
