@@ -32,8 +32,8 @@ int sqr(numberbuffer)
 {
     return (numberbuffer * numberbuffer);
 }
-//logarithm of x base b = log(x)/log(b)
-int sqr_root(numberbuffer)
+
+float sqr_root(numberbuffer)
 {
     return (sqrt(numberbuffer));
 }

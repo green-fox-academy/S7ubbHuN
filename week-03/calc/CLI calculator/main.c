@@ -6,20 +6,20 @@
 //menu, sum, sub, multiply, division, div with remainder, square, square root, logarithm, conversions
 
 
-
 int main()
 {
     char number1[20];
     char command[5];
     int number2;
-    int ptr;
+
 
     calc_menu();
     scanf("%s %s %d", number1, command, &number2);
-    long numberbuffer = strtol(number1, &ptr, 10);
+    long numberbuffer = strtol(number1, NULL, 10);
 
 
-    printf("%05d", logx(numberbuffer, number2));
+    //printf("%f", logx(numberbuffer, number2));
+    //printf("%f", sqr_root(numberbuffer));
 
 
 
