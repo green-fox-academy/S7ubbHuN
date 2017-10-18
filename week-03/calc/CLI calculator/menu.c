@@ -3,29 +3,32 @@
 
 void calc_menu()
 {
-    printf("CLI Calculator");
-    printf("\n--------------");
-    printf("\nhow to use: number1 function number2");
-    printf("\n--------------");
-    printf("\nFunctions: ");
-    printf("\n\nsummation");
-    printf("\nsubtraction");
-    printf("\nmultiplication");
-    printf("\ndivision");
-    printf("\ndivision with remainder");
-    printf("\nsquaring");
-    printf("\nsquare rooting");
-    printf("\nlogarithm");
-    printf("\nbinto");
-    printf("\noxto");
-    printf("\ndecto");
-    printf("\nhexto");
-    printf("\n--------------");
-    printf("\nexit");
-    printf("\nclear");
-    printf("\nhelp");
-    printf("\n--------------");
-    printf("\nHit enter to start!");
-    printf("\n==============");
+    printf("                 CLI Calculator");
+    printf("\n             ----------------------");
+    printf("\n  How to use: number1 command number2");
+    printf("\n             ----------------------");
+    printf("\n  Commands:\n");
+    printf("\n  +     summation");
+    printf("\n  -     subtraction");
+    printf("\n  *     multiplication");
+    printf("\n  /     division");
+    printf("\n  %c     division with remainder", '%');
+    printf("\n  ^     squaring");
+    printf("\n  v     square rooting");
+    printf("\n             ----------------------");
+    printf("\n  If you are using these commands below then\n  number2 means the desired system or logarithm!");
+    printf("\n             ----------------------");
+    printf("\n  log     logarithm");
+    printf("\n  binto   binary to ox, dec or hex");
+    printf("\n  oxto    oxal to bin, dec or hex");
+    printf("\n  decto   decimal to bin, ox or hex");
+    printf("\n  hexto   hexadecimal to bin, dec or ox");
+    printf("\n             ----------------------");
+    printf("\n  exit    Exiting from the calculator");
+    printf("\n  clear   Clears the screen");
+    printf("\n  help    Lists the menu again");
+    printf("\n             ----------------------");
+    printf("\n               Hit enter to start!");
+    printf("\n             ======================");
 
 }
