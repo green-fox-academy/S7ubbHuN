@@ -16,7 +16,7 @@ void calc_menu()
     printf("\n  ^     squaring");
     printf("\n  v     square rooting");
     printf("\n             ----------------------");
-    printf("\n  If you are using these commands below then\n  number2 means the desired system or logarithm!");
+    printf("\n  If you are using these commands below then\n  number2 means the desired system (2-32) or logarithm!");
     printf("\n             ----------------------");
     printf("\n  log     logarithm");
     printf("\n  binto   binary to ox, dec or hex");
