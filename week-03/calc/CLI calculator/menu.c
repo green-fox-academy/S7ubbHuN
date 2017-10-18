@@ -19,10 +19,10 @@ void calc_menu()
     printf("\n  If you are using these commands below then\n  number2 means the desired system (2-32) or logarithm!");
     printf("\n             ----------------------");
     printf("\n  log     logarithm");
-    printf("\n  binto   binary to ox, dec or hex");
-    printf("\n  oxto    oxal to bin, dec or hex");
-    printf("\n  decto   decimal to bin, ox or hex");
-    printf("\n  hexto   hexadecimal to bin, dec or ox");
+    printf("\n  binto   binary to oct, dec or hex");
+    printf("\n  octto    octal to bin, dec or hex");
+    printf("\n  decto   decimal to bin, oct or hex");
+    printf("\n  hexto   hexadecimal to bin, dec or oct");
     printf("\n             ----------------------");
     printf("\n  exit    Exiting from the calculator");
     printf("\n  clear   Clears the screen");
