@@ -4,7 +4,7 @@
 void any_to_other(char* str, int original_base, int new_base)
 {
     char buffer[20];
-    int *ptr;
+    int ptr;
     long number;
     number = strtol(str, &ptr, original_base);
     itoa(number, buffer, new_base);
