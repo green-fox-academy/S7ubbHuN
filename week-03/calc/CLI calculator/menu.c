@@ -20,7 +20,7 @@ void calc_menu()
     printf("\n             ----------------------");
     printf("\n  log     logarithm");
     printf("\n  binto   binary to oct, dec or hex");
-    printf("\n  octto    octal to bin, dec or hex");
+    printf("\n  octto   octal to bin, dec or hex");
     printf("\n  decto   decimal to bin, oct or hex");
     printf("\n  hexto   hexadecimal to bin, dec or oct");
     printf("\n             ----------------------");

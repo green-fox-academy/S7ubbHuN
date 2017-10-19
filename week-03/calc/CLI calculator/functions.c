@@ -1,82 +1,92 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <windows.h>
 #include "declarations.h"
 
-int sum(numberbuffer, number2)
+int sum(number1, number2)
 {
-    return (numberbuffer + number2);
+    return (number1 + number2);
 }
 
-int subt(numberbuffer, number2)
+int subt(number1, number2)
 {
-    return (numberbuffer - number2);
+    return (number1 - number2);
 }
 
-int multiply(numberbuffer, number2)
+int multiply(number1, number2)
 {
-    return (numberbuffer * number2);
+    return (number1 * number2);
 }
 
-int divi(numberbuffer, number2)
+float divi(number1, number2)
 {
-    return (numberbuffer / number2);
+    return (number1 / number2);
 }
 
-int divi_w_remainder(numberbuffer, number2)
+int divi_w_remainder(number1, number2)
 {
-    return (numberbuffer % number2);
+    return (number1 % number2);
 }
 
-int sqr(numberbuffer)
+int sqr(number1)
 {
-    return (numberbuffer * numberbuffer);
+    return (number1 * number1);
 }
 
-float sqr_root(numberbuffer)
+float sqr_root(number1)
 {
-    return (sqrt(numberbuffer));
+    return (sqrt(number1));
 }
 
-float logx(number2, numberbuffer)
+float logx(number2, number1)
 {
-    float logxofbasey = log(number2) / log(numberbuffer);
+    float logxofbasey = log(number2) / log(number1);
     return logxofbasey;
 }
 
 
-int binto(char* number1, int number2)
+int binto(char* numberstring1, int number2)
 {
     char buffer[20];
     long number;
-    number = strtol(number1, NULL, 2);
+    number = strtol(numberstring1, NULL, 2);
     itoa(number, buffer, number2);
     return buffer;
 }
 
-int octto(char* number1, int number2)
+int octto(char* numberstring1, int number2)
 {
     char buffer[20];
     long number;
-    number = strtol(number1, NULL, 8);
+    number = strtol(numberstring1, NULL, 8);
     itoa(number, buffer, number2);
     return buffer;
 }
 
-int decto(char* number1, int number2)
+int decto(char* numberstring1, int number2)
 {
     char buffer[20];
     long number;
-    number = strtol(number1, NULL, 10);
+    number = strtol(numberstring1, NULL, 10);
     itoa(number, buffer, number2);
     return buffer;
 }
 
-int hexto(char* number1, int number2)
+int hexto(char* numberstring1, int number2)
 {
     char buffer[20];
     long number;
-    number = strtol(number1, NULL, 16);
+    number = strtol(numberstring1, NULL, 16);
     itoa(number, buffer, number2);
     return buffer;
+}
+
+void set_cursor_pos(int x, int y)
+{
+    COORD coord = {0,0};
+	coord.X = x;
+	coord.Y = y;
+	//x = (strlen(number1) + strlen(command) + strlen(number2) + 2);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
