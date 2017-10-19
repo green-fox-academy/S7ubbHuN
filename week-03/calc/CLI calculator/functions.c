@@ -91,20 +91,25 @@ void set_cursor_pos(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void asking_input(char* numberstring1, char* command, char* numberstring2)
+void asking_input_scanf(char* numberstring1, char* command, char* numberstring2, int y)
 {
     scanf("%s", numberstring1);
-        if (strcmp(numberstring1, "exit") == 0) {
-            printf("The program is exiting now. Goodbye!");
-            exit(0);
-        } else if (strcmp(numberstring1, "clear") == 0) {
-            system("cls");
-        } else if (strcmp(numberstring1, "help") == 0) {
-            calc_menu();
-            system("cls");
-        }
-        scanf("%s", command);
-        scanf("%s", numberstring2);
+    if (strcmp(numberstring1, "exit") == 0) {
+        printf("The program is exiting now. Goodbye!");
+        exit(0);
+    } else if (strcmp(numberstring1, "clear") == 0) {
+        system("cls");
+        y = 0;
+        scanf("%s", numberstring1);
+    } else if (strcmp(numberstring1, "help") == 0) {
+        system("cls");
+        calc_menu();
+        system("cls");
+        y = 0;
+        scanf("%s", numberstring1);
+    }
+    scanf("%s", command);
+    scanf("%s", numberstring2);
 }
 
 int zero_operand(float number1, float number2)
@@ -123,4 +128,27 @@ int conversion_range(int number2)
         return 1;
     }
     return 0;
+}
+
+void asking_input_fgets(char* numberstring1, char* command, char* numberstring2, char* user_input)
+{
+    fgets(user_input, 50, stdin);
+    strcpy(numberstring1, strtok(user_input, " "));
+    if (strcmp(numberstring1, "exit\n") == 0) {
+        printf("The program is exiting now. Goodbye!");
+        exit(0);
+    } else if (strcmp(numberstring1, "clear\n") == 0) {
+            system("cls");
+            fgets(user_input, 50, stdin);
+            strcpy(numberstring1, strtok(user_input, " "));
+    } else if (strcmp(numberstring1, "help\n") == 0) {
+            system("cls");
+            calc_menu();
+            system("cls");
+            fgets(user_input, 50, stdin);
+            strcpy(numberstring1, strtok(user_input, " "));
+
+    }
+    strcpy(command, strtok(NULL, " "));
+    strcpy(numberstring2, strtok(NULL, " "));
 }

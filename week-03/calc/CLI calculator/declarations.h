@@ -15,6 +15,7 @@ int octto(char* numberstring1, int number2);
 int decto(char* numberstring1, int number2);
 int hexto(char* numberstring1, int number2);
 void set_cursor_posnumberstring1(int x, int y);
-void asking_input(char* numberstring1, char* command, char* numberstring2);
+void asking_input_scanf(char* numberstring1, char* command, char* numberstring2, int y);
 int zero_operand(float number1, float number2);
 int conversion_range(int number2);
+void asking_input_fgets(char* numberstring1, char* command, char* numberstring2, char* user_input);

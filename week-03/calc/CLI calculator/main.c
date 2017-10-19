@@ -13,22 +13,15 @@ int main()
     char command[6];
     char numberstring2[20];
     char user_input[80];
-    //const char ws[2] = " ";
     int y = 0;
 
     calc_menu();
     system("cls");
 
     do {
-        /*fgets(user_input, 50, stdin);
-        strcpy(numberstring1, strtok(user_input, " "));
-        if (strcmp(numberstring1, "exit\n") == 0) {
-            break;
-        }
-        strcpy(command, strtok(NULL, " "));
-        strcpy(numberstring2, strtok(NULL, " "));*/
 
-        asking_input(numberstring1, command, numberstring2);
+        //asking_input_fgets(numberstring1, command, numberstring2, user_input);
+        asking_input_scanf(numberstring1, command, numberstring2, y);
 
         float number1 = strtof(numberstring1, NULL);
         float number2 = strtof(numberstring2, NULL);
