@@ -4,17 +4,17 @@
 #include <windows.h>
 #include "declarations.h"
 
-int sum(number1, number2)
+float sum(float number1, float number2)
 {
     return (number1 + number2);
 }
 
-int subt(number1, number2)
+float  subt(float number1, float number2)
 {
     return (number1 - number2);
 }
 
-int multiply(number1, number2)
+float  multiply(float number1, float number2)
 {
     return (number1 * number2);
 }
@@ -24,12 +24,12 @@ float divi(float number1, float number2)
     return number1 / number2;
 }
 
-int divi_w_remainder(number1, number2)
+int divi_w_remainder(int number1, int number2)
 {
     return (number1 % number2);
 }
 
-int sqr(number1)
+float  sqr(float number1)
 {
     return (number1 * number1);
 }
@@ -39,7 +39,7 @@ float sqr_root(float number1)
     return (sqrt(number1));
 }
 
-float logx(number2, number1)
+float logx(int number2, int number1)
 {
     float logxofbasey = log(number2) / log(number1);
     return logxofbasey;
@@ -89,4 +89,38 @@ void set_cursor_pos(int x, int y)
 	coord.Y = y;
 	//x = (strlen(number1) + strlen(command) + strlen(number2) + 2);
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+void asking_input(char* numberstring1, char* command, char* numberstring2)
+{
+    scanf("%s", numberstring1);
+        if (strcmp(numberstring1, "exit") == 0) {
+            printf("The program is exiting now. Goodbye!");
+            exit(0);
+        } else if (strcmp(numberstring1, "clear") == 0) {
+            system("cls");
+        } else if (strcmp(numberstring1, "help") == 0) {
+            calc_menu();
+            system("cls");
+        }
+        scanf("%s", command);
+        scanf("%s", numberstring2);
+}
+
+int zero_operand(float number1, float number2)
+{
+    if (number1 == 0 || number2 == 0) {
+        printf("\tNot allowed to use 0 as operand\n");
+        return 1;
+    }
+    return 0;
+}
+
+int conversion_range(int number2)
+{
+    if (number2 < 2 || number2 > 32) {
+        printf("\tUse a number between 2 and 32\n");
+        return 1;
+    }
+    return 0;
 }

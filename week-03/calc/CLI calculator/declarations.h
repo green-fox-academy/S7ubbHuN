@@ -2,16 +2,19 @@
 #include <stdlib.h>
 #include <math.h>
 
-int sum(number1, number2);
-int subt(number1, number2);
-int multiply(number1, number2);
+float sum(float number1, float number2);
+float subt(float number1, float number2);
+float multiply(float number1, float number2);
 float divi(float number1, float number2);
-int divi_w_remainder(number1, number2);
-int sqr(number1);
+int divi_w_remainder(int number1, int number2);
+float sqr(float number1);
 float sqr_root(float number1);
-float logx(number1, number2);
+float logx(int number1, int number2);
 int binto(char* numberstring1, int number2);
 int octto(char* numberstring1, int number2);
 int decto(char* numberstring1, int number2);
 int hexto(char* numberstring1, int number2);
 void set_cursor_posnumberstring1(int x, int y);
+void asking_input(char* numberstring1, char* command, char* numberstring2);
+int zero_operand(float number1, float number2);
+int conversion_range(int number2);
