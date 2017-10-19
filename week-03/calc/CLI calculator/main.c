@@ -15,7 +15,6 @@ int main()
     int y = 0;
 
     calc_menu();
-    getchar();
     system("cls");
 
     do {
@@ -64,6 +63,8 @@ int main()
             system("cls");
         } else if (strcmp(numberstring1, "help") == 0) {
             calc_menu();
+            system("pause");
+            system("cls");
         }
         y++;
     }

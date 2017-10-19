@@ -27,8 +27,8 @@ void calc_menu()
     printf("\n  exit    Exiting from the calculator");
     printf("\n  clear   Clears the screen");
     printf("\n  help    Lists the menu again");
-    printf("\n             ----------------------");
-    printf("\n               Hit enter to start!");
-    printf("\n             ======================\n");
+    printf("\n             ----------------------\n");
+    printf("\t");
+    system("pause");
 
 }
