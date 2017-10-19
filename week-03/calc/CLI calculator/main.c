@@ -9,12 +9,13 @@
 int main()
 {
     char number1[20];
-    char command[5];
+    char command[6];
     int number2;
-
+    //long numberbuffer = strtol(number1, NULL, 10);
     calc_menu();
 
     do {
+        //getchar();
         scanf("%s %s %d", number1, command, &number2);
         long numberbuffer = strtol(number1, NULL, 10);
 
