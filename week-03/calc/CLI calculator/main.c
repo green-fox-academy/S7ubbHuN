@@ -12,13 +12,35 @@ int main()
     char numberstring1[20];
     char command[6];
     char numberstring2[20];
+    char user_input[80];
+    //const char ws[2] = " ";
     int y = 0;
 
     calc_menu();
     system("cls");
 
     do {
-        scanf("%s %s %s", numberstring1, command, numberstring2);
+        /*fgets(user_input, 50, stdin);
+        strcpy(numberstring1, strtok(user_input, " "));
+        if (strcmp(numberstring1, "exit\n") == 0) {
+            break;
+        }
+        strcpy(command, strtok(NULL, " "));
+        strcpy(numberstring2, strtok(NULL, " "));*/
+
+        scanf("%s", numberstring1);
+        if (strcmp(numberstring1, "exit") == 0) {
+            break;
+        } else if (strcmp(numberstring1, "clear") == 0) {
+            system("cls");
+        } else if (strcmp(numberstring1, "help") == 0) {
+            calc_menu();
+            system("cls");
+        }
+        scanf("%s", command);
+        scanf("%s", numberstring2);
+
+
         long number1 = strtol(numberstring1, NULL, 10);
         long number2 = strtol(numberstring2, NULL, 10);
         int x = strlen(numberstring1) + strlen(command) + strlen(numberstring2) + 2;
@@ -59,12 +81,6 @@ int main()
         } else if (strcmp(command, "hexto") == 0) {
             set_cursor_pos(x, y);
             printf(" = %s\n", hexto(numberstring1, number2));
-        } else if (strcmp(numberstring1, "clear") == 0) {
-            system("cls");
-        } else if (strcmp(numberstring1, "help") == 0) {
-            calc_menu();
-            system("pause");
-            system("cls");
         }
         y++;
     }

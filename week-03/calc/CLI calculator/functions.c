@@ -19,9 +19,9 @@ int multiply(number1, number2)
     return (number1 * number2);
 }
 
-float divi(number1, number2)
+float divi(float number1, float number2)
 {
-    return (number1 / number2);
+    return number1 / number2;
 }
 
 int divi_w_remainder(number1, number2)
@@ -34,7 +34,7 @@ int sqr(number1)
     return (number1 * number1);
 }
 
-float sqr_root(number1)
+float sqr_root(float number1)
 {
     return (sqrt(number1));
 }
