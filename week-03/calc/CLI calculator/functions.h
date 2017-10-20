@@ -8,7 +8,7 @@ float subt(float number1, float number2);
 float multiply(float number1, float number2);
 float divi(float number1, float number2);
 int divi_w_remainder(int number1, int number2);
-float sqr(float number1);
+float power(float number1, float number2);
 float sqr_root(float number1);
 float logx(int number1, int number2);
 int binto(char* numberstring1, int number2);

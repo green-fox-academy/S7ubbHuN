@@ -5,7 +5,8 @@
 #include "functions.h"
 #include "menu.h"
 
-//menu, sum, sub, multiply, division, div with remainder, square, square root, logarithm, conversions
+//menu, sum, sub, multiply, division, div with remainder,
+//square, square root, logarithm, conversions
 // USE EXTERN OPERAND FOR Y!!!!!
 
 int y = 0;
@@ -52,7 +53,7 @@ int main()
             }
         } else if (strcmp(command, "^") == 0) {
             set_cursor_pos(x, y);
-            printf(" = %.2f\n", sqr(number1));
+            printf(" = %.2f\n", power(number1, number2));
         } else if (strcmp(command, "v") == 0) {
             set_cursor_pos(x, y);
             if (zero_operand(number1, number2) == 0) {
