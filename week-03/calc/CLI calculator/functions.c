@@ -139,12 +139,14 @@ void asking_input_fgets(char* numberstring1, char* command, char* numberstring2,
         exit(0);
     } else if (strcmp(numberstring1, "clear\n") == 0) {
             system("cls");
+            y = 0;
             fgets(user_input, 50, stdin);
             strcpy(numberstring1, strtok(user_input, " "));
     } else if (strcmp(numberstring1, "help\n") == 0) {
             system("cls");
             calc_menu();
             system("cls");
+            y = 0;
             fgets(user_input, 50, stdin);
             strcpy(numberstring1, strtok(user_input, " "));
 
