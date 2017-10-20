@@ -5,7 +5,7 @@
 #include "declarations.h"
 
 //menu, sum, sub, multiply, division, div with remainder, square, square root, logarithm, conversions
-
+// USE EXTERN OPERAND FOR Y!!!!!
 
 int main()
 {
@@ -15,13 +15,14 @@ int main()
     char user_input[80];
     int y = 0;
 
+
     calc_menu();
     system("cls");
 
     do {
 
         //asking_input_fgets(numberstring1, command, numberstring2, user_input);
-        asking_input_scanf(numberstring1, command, numberstring2, y);
+        asking_input_scanf(numberstring1, command, numberstring2);
 
         float number1 = strtof(numberstring1, NULL);
         float number2 = strtof(numberstring2, NULL);
@@ -46,10 +47,10 @@ int main()
             if (zero_operand(number1, number2) == 0) {
                 printf(" = %d\n", divi_w_remainder(number1, number2));
             }
-        } else if (strcmp(command, "sqr") == 0) {
+        } else if (strcmp(command, "^") == 0) {
             set_cursor_pos(x, y);
             printf(" = %.2f\n", sqr(number1));
-        } else if (strcmp(command, "sqr_root") == 0) {
+        } else if (strcmp(command, "v") == 0) {
             set_cursor_pos(x, y);
             if (zero_operand(number1, number2) == 0) {
                 printf(" = %.2f\n", sqr_root(number1));

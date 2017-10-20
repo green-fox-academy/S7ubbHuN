@@ -87,11 +87,10 @@ void set_cursor_pos(int x, int y)
     COORD coord = {0,0};
 	coord.X = x;
 	coord.Y = y;
-	//x = (strlen(number1) + strlen(command) + strlen(number2) + 2);
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void asking_input_scanf(char* numberstring1, char* command, char* numberstring2, int y)
+void asking_input_scanf(char* numberstring1, char* command, char* numberstring2)
 {
     scanf("%s", numberstring1);
     if (strcmp(numberstring1, "exit") == 0) {
@@ -99,13 +98,13 @@ void asking_input_scanf(char* numberstring1, char* command, char* numberstring2,
         exit(0);
     } else if (strcmp(numberstring1, "clear") == 0) {
         system("cls");
-        y = 0;
+        extern int y;
         scanf("%s", numberstring1);
     } else if (strcmp(numberstring1, "help") == 0) {
         system("cls");
         calc_menu();
         system("cls");
-        y = 0;
+        extern int y;
         scanf("%s", numberstring1);
     }
     scanf("%s", command);
@@ -152,3 +151,4 @@ void asking_input_fgets(char* numberstring1, char* command, char* numberstring2,
     strcpy(command, strtok(NULL, " "));
     strcpy(numberstring2, strtok(NULL, " "));
 }
+
