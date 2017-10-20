@@ -3,7 +3,6 @@
 #include <math.h>
 
 extern int y;
-
 float sum(float number1, float number2);
 float subt(float number1, float number2);
 float multiply(float number1, float number2);

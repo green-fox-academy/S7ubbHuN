@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <windows.h>
-#include "declarations.h"
+#include "functions.h"
+#include "menu.h"
 
 float sum(float number1, float number2)
 {
@@ -98,13 +99,13 @@ void asking_input_scanf(char* numberstring1, char* command, char* numberstring2)
         exit(0);
     } else if (strcmp(numberstring1, "clear") == 0) {
         system("cls");
-        extern int y;
+        y = 0;
         scanf("%s", numberstring1);
     } else if (strcmp(numberstring1, "help") == 0) {
         system("cls");
         calc_menu();
         system("cls");
-        extern int y;
+        y = 0;
         scanf("%s", numberstring1);
     }
     scanf("%s", command);

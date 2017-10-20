@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <windows.h>
-#include "declarations.h"
+#include "functions.h"
+#include "menu.h"
 
 //menu, sum, sub, multiply, division, div with remainder, square, square root, logarithm, conversions
 // USE EXTERN OPERAND FOR Y!!!!!
+
+int y = 0;
 
 int main()
 {
@@ -13,7 +16,7 @@ int main()
     char command[6];
     char numberstring2[20];
     char user_input[80];
-    int y = 0;
+
 
 
     calc_menu();

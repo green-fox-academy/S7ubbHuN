@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "menu.h"
 
 void calc_menu()
 {
