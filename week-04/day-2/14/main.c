@@ -7,9 +7,7 @@ void string_copy(char *dest, char *source)
         dest[i] = source[i];
         i++;
     }
-
     dest[i] = '\0';
-
 }
 
 int main()
