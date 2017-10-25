@@ -21,7 +21,7 @@ int main()
     struct Car land_rover = {LAND_ROVER, 300, 70};
     struct Car tesla = {TESLA, 100};
 
-    printcar(tesla);
+    printcar(toyota);
 
     return 0;
 }
@@ -29,16 +29,16 @@ int main()
 void printcar (struct Car type)
 {
     switch(type.type) {
-    case VOLVO:
+    case 0:
         printf("Type: %d, km: %.f, gas: %.f\n", type.type, type.km, type.gas);
         break;
-    case TOYOTA:
+    case 1:
         printf("Type: %d, km: %.f, gas: %.f\n", type.type, type.km, type.gas);
         break;
-    case LAND_ROVER:
+    case 2:
         printf("Type: %d, km: %.f, gas: %.f\n", type.type, type.km, type.gas);
         break;
-    case TESLA:
+    case 3:
         printf("Type: %d, km: %.f\n", type.type, type.km);
         break;
     }
