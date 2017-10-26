@@ -18,7 +18,7 @@ void todo_menu()
     printf("\n  -p      Add priority to a task");
     printf("\n  -lp     Lists all the tasks by priority");
     printf("\n             ----------------------");
-    printf("\n  exit    Exits from the calculator");
+    printf("\n  exit    Exits from the calculator and writes everything to file");
     printf("\n  clear   Clears the screen");
     printf("\n  help    Lists the menu again");
     printf("\n             ----------------------\n");
