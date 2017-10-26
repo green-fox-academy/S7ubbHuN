@@ -6,7 +6,7 @@ void todo_menu()
 {
     printf("                 TO-DO Application");
     printf("\n             ----------------------");
-    printf("\n  How to use: command 'task'");
+    printf("\n  How to use: command task");
     printf("\n             ----------------------");
     printf("\n  Commands:\n");
     printf("\n  -a      Adds a new task");
