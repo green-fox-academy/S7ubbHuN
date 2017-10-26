@@ -3,6 +3,6 @@
 
 int main()
 {
-    printf("Hello world!\n");
+    todo_menu();
     return 0;
 }
