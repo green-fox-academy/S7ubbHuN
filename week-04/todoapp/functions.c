@@ -62,6 +62,7 @@ void asking_input_scanfgets(char* command, char* user_input)
 void add_new_task(todo_s *task, char* user_input)
 {
     strcpy (task[i].description, user_input);
+    strcpy (task[i].flag, "[ ]");
     i++;
 }
 
@@ -69,19 +70,23 @@ void write_to_file(todo_s *task)
 {
     FILE *fp = fopen("todos.txt", "w");
     for (int j = 0; j < i; j++) {
-        fprintf(fp, "%s", task[j].description);
+        fprintf(fp, "%s%s", task[j].flag, task[j].description);
         }
     fclose(fp);
 }
 
 void list_todos(todo_s *task)
 {
+    printf("   My TODOs are:\n");
+    printf("-------------------\n");
+    printf("   DONE  TASK\n");
+    printf("-------------------\n");
     for (int j = 0; j < i; j++) {
-        printf("%s", task[j].description);
-        }
+        printf("%d. %s %s", j + 1, task[j].flag, task[j].description);
+    }
 }
 
-void remove_task(todo_s *task, char* user_input)
+/*void remove_taskBYSTRING(todo_s *task, char* user_input)
 {
     int pos = 0;
     i--;
@@ -93,4 +98,44 @@ void remove_task(todo_s *task, char* user_input)
             }
         }
     }
+}*/
+
+void remove_task(todo_s *task, char* user_input) //remove by number
+{
+    int pos = 0;
+    i--;
+    int number = strtol(user_input, NULL, 10);
+    for (int k = 0; k < i; k++) {
+        if (k == number - 1) {
+            pos = k;
+            for (int k = pos; k < i; k++) {
+                strcpy(task[k].description, task[k + 1].description);
+
+            }
+
+        }
+    }
 }
+
+void complete_flag_task(todo_s *task, char* user_input)
+{
+    int number = strtol(user_input, NULL, 10);
+    for (int k = 0; k < i; k++) {
+        if (k == number - 1) {
+            strcpy (task[k].flag, "[X]");
+        }
+    }
+}
+
+void un_complete_flag_task(todo_s *task, char* user_input)
+{
+    int number = strtol(user_input, NULL, 10);
+    for (int k = 0; k < i; k++) {
+        if (k == number - 1) {
+            strcpy (task[k].flag, "[ ]");
+        }
+    }
+}
+
+
+

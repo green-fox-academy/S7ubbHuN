@@ -13,6 +13,8 @@ void todo_menu()
     printf("\n  -l      Lists all the tasks");
     printf("\n  -e      Empty the list");
     printf("\n  -rm     Removes a task");
+    printf("\n  -f      Flags a task complete");
+    printf("\n  -uf     Removing the flag from a task");
     printf("\n  -p      Add priority to a task");
     printf("\n  -lp     Lists all the tasks by priority");
     printf("\n             ----------------------");

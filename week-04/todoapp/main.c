@@ -27,7 +27,9 @@ int main()
     todo_s task[10] = {0};
     rewind(fp); //file pointer reset
     for (i = 0; i < count; i++) {
+        fgets(task[i].flag, 4, fp);
         fgets(task[i].description, MAXC, fp);
+
     }
     fclose(fp);
 
@@ -67,7 +69,12 @@ int main()
             write_to_file(task);
         } else if (strcmp(command, "-rm") == 0) {
             remove_task(task, user_input);
-
+            write_to_file(task);
+        } else if (strcmp(command, "-f") == 0) {
+            complete_flag_task(task, user_input);
+            write_to_file(task);
+        } else if (strcmp(command, "-uf") == 0) {
+            un_complete_flag_task(task, user_input);
             write_to_file(task);
         } else if (strcmp(command, "-p") == 0) {
 
