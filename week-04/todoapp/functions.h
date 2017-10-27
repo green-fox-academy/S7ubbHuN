@@ -8,6 +8,7 @@ char description[MAXC];
 } todo_s;
 
 int i;
+int ch;
 
 void write_to_file(todo_s *task);
 void asking_input_fgets(char* command, char* todostring, char* user_input);

@@ -1,12 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "functions.h"
-
+#include <errno.h>
+#include <string.h>
+#define MAXC 100
 
 
 
 int main()
 {
+
+    FILE *fp = fopen("todos.txt", "r");
+    if(fp == NULL) {
+        perror("Error opening file");
+        return(-1);
+    }
+
+    //megszámolni a sortöréseket
+    int count = 0;
+    while ((ch = fgetc(fp)) != EOF){
+        if (ch == '\n')
+        count++;
+    }
+    printf("%d", count);
+    //a file tartalma beolvasva memóriába
+    todo_s task[10] = {0};
+    rewind(fp); //file pointer reset
+    for (i = 0; i < count; i++) {
+        fgets(task[i].description, MAXC, fp);
+    }
+    fclose(fp);
 
     char command[3];
     char todostring[100];
@@ -16,24 +39,7 @@ int main()
     system("cls");
 
     do {
-        FILE *fp = fopen("todos.txt", "r");
-            if(fp == NULL) {
-                perror("Error opening file");
-                return(-1);
-            }
-        //megszámolni a sortöréseket
-        int ch, count = 0;
-        while ((ch = fgetc(fp)) != EOF){
-            if (ch == '\n')
-                count++;
-            }
-        //a file tartalma beolvasva memóriába
-        todo_s task[10] = {0};
-        rewind(fp); //file pointer reset
-        for (i = 0; i < (count + 1); i++) {
-            fgets(task[i].description, MAXC, fp);
-        }
-        fclose(fp);
+
 
         asking_input_fgets(command, todostring, user_input);
 

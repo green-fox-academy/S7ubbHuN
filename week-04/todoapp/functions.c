@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "functions.h"
 #include "menu.h"
+#include <errno.h>
+#include <string.h>
 
 
 
@@ -25,7 +27,7 @@ void asking_input_fgets(char* command, char* todostring, char* user_input)
             fgets(user_input, 255, stdin);
             strcpy(command, strtok(user_input, " "));
     }
-    strcpy(todostring, strtok(NULL, "\n+1"));
+    strcpy(todostring, strtok(NULL, "\0"));
 }
 
 void add_new_task(todo_s *task, char* todostring)
@@ -36,7 +38,9 @@ void add_new_task(todo_s *task, char* todostring)
 
 void write_to_file(todo_s *task)
 {
-    FILE *fp = fopen("todos.txt", "wb");
-    fwrite(task, sizeof(char), sizeof(task), fp);
+    FILE *fp = fopen("todos.txt", "w");
+    for (int j = 0; j < i; j++) {
+        fprintf(fp, "%s", task[j].description);
+        }
     fclose(fp);
 }
