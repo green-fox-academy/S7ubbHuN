@@ -10,8 +10,6 @@ void todo_menu()
     printf("\n             ----------------------");
     printf("\n  Commands:\n");
     printf("\n  -a      Adds a new task");
-    printf("\n  -wr     Write current todos to file");
-    printf("\n  -rd     Read todos from a file");
     printf("\n  -l      Lists all the tasks");
     printf("\n  -e      Empty the list");
     printf("\n  -rm     Removes a task");
