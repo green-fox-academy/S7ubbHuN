@@ -56,7 +56,7 @@ int main()
         }
     }
     printf("\n\n");
-    char move_KN_chessboard[8][8] = {
+    char move_H_chessboard[8][8] = {
         {'R', 'H', 'B', 'Q', 'K', 'B', 'H', 'R'},
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
@@ -68,7 +68,7 @@ int main()
     };
     for ( i = 0; i < 8; i++ ) {
         for ( j = 0; j < 8; j++ ) {
-            printf("%c", move_KN_chessboard[i][j]);
+            printf("%c", move_H_chessboard[i][j]);
             if (j == 7){
                 printf("\n");
             }
