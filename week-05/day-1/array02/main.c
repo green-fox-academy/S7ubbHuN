@@ -11,10 +11,24 @@ int main()
 {
     srand(time(NULL));
     int numarray[12];
-    int i;
+    int i, j, buffer;
 
     for (i = 0; i < 12; i++){
         numarray[i] = rand();
+        printf("%d, ", numarray[i]);
+    }
+    printf("\n\n");
+    for (i = 0; i < 12; i++){
+        for (j = 0; j < 12; j++) {
+            if (numarray[j] > numarray[j + 1]) {
+                buffer = numarray[j];
+                numarray[j] = numarray[j + 1];
+                numarray[j + 1] = buffer;
+            }
+        }
+    }
+    for (i = 0; i < 12; i++){
+        printf("%d, ", numarray[i]);
     }
 
     return 0;
