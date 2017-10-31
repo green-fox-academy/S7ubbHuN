@@ -16,8 +16,6 @@
 
 int char_change (char *arr1, char *arr2, unsigned int index, int arr1_l, int arr2_l)
 {
-    //int arr1_l = (sizeof arr1 / sizeof arr1[0]);
-    //int arr2_l = (sizeof arr2 / sizeof arr2[0]);
     if (index > arr2_l) {
         return -1;
     } else if ((arr2_l - index) > (arr1_l - index)) {
@@ -29,14 +27,6 @@ int char_change (char *arr1, char *arr2, unsigned int index, int arr1_l, int arr
     }
     return 0;
 }
-
-
-
-
-
-
-
-
 
 
 int main()
@@ -71,7 +61,6 @@ int main()
 
     //3. inserted content is longer than the receiving array (return 1)
 
-
     arr2_l = 20;
     for (char i = 'a'; i < ('a' + arr1_l); i++) {
         arr1[i] = i;
@@ -82,5 +71,5 @@ int main()
     index = 9;
     printf("%d\n", char_change(arr1, arr2, index, arr1_l, arr2_l));
 
-
+    return 0;
 }
