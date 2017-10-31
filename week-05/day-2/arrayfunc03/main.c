@@ -12,8 +12,31 @@
  * In the main function create code that demonstrates that Your function works approrpiately.
  */
 
+int *arraylengths (char *arr1, char *arr2, char *arr3)
+{
+    int arr1_l = strlen(arr1);
+    int arr2_l = strlen(arr2);
+    int arr3_l = strlen(arr3);
+    int output[3] = {arr1_l, arr2_l, arr3_l};
+
+    return output;
+
+
+
+}
+
 int main()
 {
-    printf("Hello world!\n");
+    char arr1[] = {"Good"};
+    char arr2[] = {"Morning"};
+    char arr3[] = {"Cica"};
+    int *output_pointer;
+    int i;
+    output_pointer = arraylengths(arr1, arr2, arr3);
+
+    for (i = 0; i < 3; i++){
+        printf("%d, ", *(output_pointer + i));
+    }
+
     return 0;
 }
