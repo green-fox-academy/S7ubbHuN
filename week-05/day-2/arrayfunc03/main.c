@@ -38,5 +38,6 @@ int main()
         printf("%d, ", *(output_pointer + i));
     }
 
+
     return 0;
 }
