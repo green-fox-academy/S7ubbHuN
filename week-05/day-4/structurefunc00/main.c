@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 /*
+1.
  * Create a structure representing the data of a book:
  *    * Title
  *    * Author
@@ -18,7 +19,14 @@
  *
  * Create a main where You demonstrate that each of these works and print out the necessary info.
  * IMPORTANT: You should only print from the main function. All other functions should return the info needed.
+
+ 2.
+
+ * Take exercise structures_functions_00.
+ * Create an additional structure: Author. This should store Given name and Surname of the author.
+ * Rewrite the previous exercise to work with this new structure.
  */
+
 typedef struct {
     char surname[20];
     char last_name[20];
@@ -78,19 +86,15 @@ int main()
             exit(0);
         } else if (strcmp(command, "add") == 0) {
             create_book(book);
-
         } else if (strcmp(command, "title") == 0) {
             set_title(book, user_input);
-
         } else if (strcmp(command, "author") == 0) {
             set_author(book, user_input);
-
         } else if (strcmp(command, "year") == 0) {
             set_year(book, user_input);
-
         } else if (strcmp(command, "list") == 0) {
             for (int i = 0; i < book_counter; i++) {
-                printf("\nBook num.: %d\nTitle: %sAuthor : %s %sYear of publishing: %s\n", i + 1, book[i].title, book[i].author.surname, book[i].author.last_name, book, book[i].year);
+                printf("\nBook num.: %d\nTitle: %sAuthor : %s %sYear of publishing: %s\n", i + 1, book[i].title, book[i].author.surname, book[i].author.last_name, book[i].year);
             }
         }
     }
