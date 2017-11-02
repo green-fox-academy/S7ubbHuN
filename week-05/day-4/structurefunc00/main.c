@@ -20,10 +20,16 @@
  * IMPORTANT: You should only print from the main function. All other functions should return the info needed.
  */
 typedef struct {
+    char surname[20];
+    char last_name[20];
+} author_name;
+
+typedef struct {
     char title[255];
-    char author[100];
+    author_name author;
     char year[5];
 } books;
+
 
 int book_counter = 0;
 
@@ -47,7 +53,8 @@ void set_title(books *book, char *user_input)
 
 void set_author(books *book, char *user_input)
 {
-    strcpy (book[book_counter - 1].author, user_input);
+    strcpy (book[book_counter - 1].author.surname, strtok(user_input, " "));
+    strcpy (book[book_counter - 1].author.last_name, strtok(NULL, " "));
 }
 
 void set_year(books *book, char *user_input)
@@ -83,7 +90,7 @@ int main()
 
         } else if (strcmp(command, "list") == 0) {
             for (int i = 0; i < book_counter; i++) {
-                printf("\nBook num.: %d\nTitle: %sAuthor : %sYear of publishing: %s\n", i + 1, book[i].title, book[i].author, book[i].year);
+                printf("\nBook num.: %d\nTitle: %sAuthor : %s %sYear of publishing: %s\n", i + 1, book[i].title, book[i].author.surname, book[i].author.last_name, book, book[i].year);
             }
         }
     }
