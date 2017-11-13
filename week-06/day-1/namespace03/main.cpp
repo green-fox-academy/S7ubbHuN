@@ -14,13 +14,13 @@ namespace Person
     int favnum = 42;
 }
 
-int year_of_birth()
+int year_of_birth(int age)
 {
     return (2017 - Person::age);
 }
 
 int main()
 {
-    std::cout << year_of_birth() << std::endl;
+    std::cout << year_of_birth(Person::age) << std::endl;
     return 0;
 }
