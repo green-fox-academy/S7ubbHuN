@@ -3,7 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <vector>
-#include <numeric>
+
 
 int main()
 {
@@ -20,6 +20,5 @@ int main()
     for(unsigned int i = 0; i < numbers.size(); ++i) {
         std::cout << numbers[i] << ", ";
     }
-
     return 0;
 }
