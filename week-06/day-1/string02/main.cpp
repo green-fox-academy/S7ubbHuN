@@ -10,6 +10,12 @@ using namespace std;
 
 int main()
 {
+    string name = "Balazs Sass";
+    int age = 31;
+    double height = 1.74;
+    bool married = true;
+
+    cout << name << ", " << age << ", " << height << ", " << married;
 
     return 0;
 }
