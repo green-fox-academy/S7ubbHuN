@@ -10,7 +10,7 @@ class House {
     unsigned int price;
   public:
     House(std::string address, unsigned int area);
-        virtual ~House();
+    virtual ~House();
     unsigned int get_price();
 };
 
