@@ -1,16 +1,19 @@
 #ifndef HOUSE_H
 #define HOUSE_H
+#include <iostream>
 
 
-class House
-{
-    public:
-        House();
+class House {
+  private:
+    std::string address;
+    unsigned int area;
+    unsigned int price;
+  public:
+    House(std::string address, unsigned int area);
         virtual ~House();
-
-    protected:
-
-    private:
+    unsigned int get_price() {
+        return this->price;
+    }
 };
 
 #endif // HOUSE_H

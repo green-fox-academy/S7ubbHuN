@@ -1,8 +1,9 @@
 #include "House.h"
 
-House::House()
+House::House(std::string address, unsigned int area)
 {
-    //ctor
+    this->address = address;
+    this->area = area;
 }
 
 House::~House()
