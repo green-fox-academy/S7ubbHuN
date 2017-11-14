@@ -1,6 +1,7 @@
 #ifndef PIRATE_H
 #define PIRATE_H
 #include <string>
+#include <iostream>
 
 
 class Pirate
@@ -8,10 +9,11 @@ class Pirate
     public:
         Pirate();
         virtual ~Pirate();
-
-    protected:
+        const char* drink_rum();
+        const char* hows_goin_mate();
 
     private:
+        unsigned int counter;
 };
 
 #endif // PIRATE_H
