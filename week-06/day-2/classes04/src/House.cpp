@@ -10,3 +10,8 @@ House::~House()
 {
     //dtor
 }
+
+unsigned int House::get_price() {
+    price = (area * 400);
+    return this->price;
+}

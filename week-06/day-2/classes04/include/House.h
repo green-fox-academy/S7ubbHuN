@@ -11,9 +11,7 @@ class House {
   public:
     House(std::string address, unsigned int area);
         virtual ~House();
-    unsigned int get_price() {
-        return this->price;
-    }
+    unsigned int get_price();
 };
 
 #endif // HOUSE_H
