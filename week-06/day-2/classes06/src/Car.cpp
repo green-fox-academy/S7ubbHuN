@@ -14,5 +14,5 @@ Car::~Car()
 
 unsigned int Car::run() {
     unsigned int number = 5;
-    return number * km;
+    return number + km;
 }
