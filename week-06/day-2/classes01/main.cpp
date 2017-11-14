@@ -10,5 +10,9 @@ int main() {
   Student st ("John", 21);
   st.print_data();
 
+  st.set_name("Bazsi");
+  st.set_age(37);
+  st.print_data();
+
   return 0;
 }
