@@ -13,5 +13,10 @@ int main()
     std::cout << circle.get_circumference() << std::endl;
     std::cout << circle.get_area()<< std::endl;
 
+    Circle circle2 (25.00);
+    std::cout << circle2.get_circumference() << std::endl;
+    std::cout << circle2.get_area()<< std::endl;
+
+    std::cout << (circle2.get_circumference() - circle.get_circumference())<< std::endl;
     return 0;
 }
