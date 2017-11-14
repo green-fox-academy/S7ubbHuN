@@ -19,6 +19,6 @@ void Student::set_age(unsigned int age) {
     this->age = age;
 }
 
-void Student::print_data() {
+void Student::greet() {
     std::cout << "hello my name is " << name << " and i am " << age << " yrs old" << std::endl;
 }

@@ -9,7 +9,7 @@ class Student
         virtual ~Student();
         void set_name(std::string name);
         void set_age(unsigned int age);
-        void print_data();
+        void greet();
 
     private:
         std::string name;

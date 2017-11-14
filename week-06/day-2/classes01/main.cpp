@@ -8,11 +8,11 @@ int main() {
   // it's age to 21
 
   Student st ("John", 21);
-  st.print_data();
+  st.greet();
 
   st.set_name("Bazsi");
   st.set_age(37);
-  st.print_data();
+  st.greet();
 
   return 0;
 }
