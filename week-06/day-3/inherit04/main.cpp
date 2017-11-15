@@ -15,20 +15,32 @@
 
 class ParentClass {
     public:
-        virtual const char* pcus1() {
-            return "Public Class unique string 1.";
+        virtual std::string pcus1() {
+            return "Parent Class unique string 1.";
         }
-        const char* pcus2() {
-            return "Public Class unique string 2.";
+        std::string pcus2() {
+            return "Parent Class unique string 2.";
         }
 };
 
 class ChildClass: public ParentClass {
     public:
-        const char* pcus1() {
+        std::string pcus1() {
             return "Child Class unique string 1.";
         }
-        const char* pcus2() {
+        std::string pcus2() {
             return "Child Class unique string 2.";
         }
 };
+
+int main()
+{
+    ParentClass* a = new ChildClass();
+    std::cout << a->pcus1() << std::endl;
+    std::cout << a->pcus2() << std::endl;
+
+    std::cout << ((ChildClass*)a)->pcus1() << std::endl;
+    std::cout << ((ChildClass*)a)->pcus2() << std::endl;
+
+    return 0;
+}
