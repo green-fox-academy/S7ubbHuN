@@ -15,9 +15,11 @@ class Shape {
 };
 class Circle: public Shape {
     public:
-        void set_area(float radius) {
+        void set_radius(float radius) {
             this->radius = radius;
             calc_area();
+            }
+        void get_area() {
             std::cout << "The area of the circle is: " << area << std::endl;
         }
    private:
@@ -30,11 +32,14 @@ class Circle: public Shape {
 };
 class Triangle: public Shape {
     public:
-        void set_area(float a, float b, float c) {
+        void set_sides(float a, float b, float c) {
             this->a = a;
             this->b = b;
             this->c = c;
             calc_area();
+
+        }
+        void get_area() {
             std::cout << "The area of the triangle is: " << area << std::endl;
         }
     private:
@@ -57,8 +62,11 @@ int main()
 {
     Circle circle;
     Triangle triangle;
-    circle.set_area(10);
-    triangle.set_area(2, 3, 4);
+    circle.set_radius(10);
+    triangle.set_sides(2, 3, 4);
+
+    circle.get_area();
+    triangle.get_area();
 
     return 0;
 }
