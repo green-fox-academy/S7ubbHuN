@@ -10,8 +10,20 @@
 class Shape {
     public:
         virtual void calc_area() = 0;
+        void set_paint_price(float price) {
+            this->price = price;
+        }
+        float how_much_to_paint() {
+            return (price*area);
+        }
+        void get_area() {
+            std::cout << "The area of the circle is: " << area << " and it will costs: " << how_much_to_paint() << "$ if the paint costs: " << price << "$/sqm." << std::endl;
+        }
     private:
     protected:
+        float area;
+        float price;
+
 };
 class Circle: public Shape {
     public:
@@ -19,12 +31,8 @@ class Circle: public Shape {
             this->radius = radius;
             calc_area();
             }
-        void get_area() {
-            std::cout << "The area of the circle is: " << area << std::endl;
-        }
-   private:
+    private:
         float radius;
-        float area;
     protected:
         void calc_area() {
             this->area = radius*radius*3.14;
@@ -37,22 +45,16 @@ class Triangle: public Shape {
             this->b = b;
             this->c = c;
             calc_area();
-
-        }
-        void get_area() {
-            std::cout << "The area of the triangle is: " << area << std::endl;
         }
     private:
         float a;
         float b;
         float c;
         float s;
-        float area;
     protected:
         void calc_area() {
             this->s = (float)(a+b+c) / 2;
             this->area = sqrt(s*(s-a)*(s-b)*(s-c));
-
         }
 };
 
@@ -64,6 +66,8 @@ int main()
     Triangle triangle;
     circle.set_radius(10);
     triangle.set_sides(2, 3, 4);
+    circle.set_paint_price(21.6);
+    triangle.set_paint_price(15.6);
 
     circle.get_area();
     triangle.get_area();
