@@ -7,6 +7,10 @@
 // For each derived class, implement a calc_area() method
 // which calculates the area of the shape and stores it inside
 // the class (so it is a private field)
+// Create public method called how_much_to_paint()
+// which should get the area and the price of the paint as parameters
+// It should return the costs of the painting
+
 class Shape {
     public:
         virtual void calc_area() = 0;
