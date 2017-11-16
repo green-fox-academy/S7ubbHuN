@@ -13,16 +13,11 @@ int main()
     // "Nothin'" otherwise
 
     Pirate pirate;
-
-    std::cout << pirate.hows_goin_mate() << std::endl;
-    std::cout << pirate.drink_rum() << std::endl;
-    std::cout << pirate.hows_goin_mate() << std::endl;
-    std::cout << pirate.drink_rum() << std::endl;
-    std::cout << pirate.drink_rum() << std::endl;
-    std::cout << pirate.drink_rum() << std::endl;
-    std::cout << pirate.drink_rum() << std::endl;
-    std::cout << pirate.hows_goin_mate() << std::endl;
-
+    int i;
+    for (i = 0; 1 < 10; ++i) {
+        std::cout << pirate.drink_rum() << std::endl;
+        std::cout << pirate.hows_goin_mate() << std::endl;
+    }
 
     return 0;
 }
