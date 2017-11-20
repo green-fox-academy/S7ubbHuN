@@ -7,7 +7,7 @@
 
 int main()
 {
-    try {
+    /*try {
         int a = 0;
         int b = 0;
         std::cin >> a;
@@ -20,6 +20,25 @@ int main()
         std::cout << c;
     }
     catch(int x) {
+        std::cout << "you can not divide by zero! Err no.: " << x;
+    }
+    return 0;*/
+
+    // Throw an char in the try block
+
+    try {
+        int a = 0;
+        int b = 0;
+        std::cin >> a;
+        std::cin >> b;
+
+        if (b == 0){
+            throw 'x';
+        }
+        int c = a/b;
+        std::cout << c;
+    }
+    catch(char x) {
         std::cout << "you can not divide by zero! Err no.: " << x;
     }
     return 0;
