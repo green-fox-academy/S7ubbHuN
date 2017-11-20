@@ -29,7 +29,22 @@ int main() {
 // Write catch blocks for each possibly thrown exception.
 // In each catch block write out what the exception's type was. And what the exceptions value was.
 
-	}
 
+        catch (float x) {
+            std::cout << "The exception type is float." << "\nThe exception value is: " << x << std::endl;
+        }
+        catch (double x) {
+            std::cout << "The exception type is double." << "\nThe exception value is: " << x << std::endl;
+        }
+        catch (const char* x) {
+            std::cout << "The exception type is char." << "\nThe exception value is: " << x << std::endl;
+        }
+        catch (bool x) {
+            std::cout << "The exception type is bool." << "\nThe exception value is: " << x << std::endl;
+        }
+        catch (int x) {
+            std::cout << "The exception type is int." << "\nThe exception value is: " << x << std::endl;
+        }
+	}
 	return 0;
 }
