@@ -14,13 +14,13 @@ int main()
         std::cin >> b;
 
         if (b == 0){
-            throw std::runtime_error("you can not divide by zero!");
+            throw 10;
         }
         int c = a/b;
         std::cout << c;
     }
-    catch(std::runtime_error &err){
-        std::cout << err.what();
+    catch(int x) {
+        std::cout << "you can not divide by zero! Err no.: " << x;
     }
     return 0;
 }
