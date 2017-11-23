@@ -23,9 +23,10 @@ void menu() {
     << endl;
 }
 
-void list_data() {
-
-
+void list_data(vector<string> datas) {
+    for (int i = 0; i < datas.size(); ++i) {
+        cout << datas.at(i) << endl;
+    }
 }
 
 
@@ -37,27 +38,13 @@ int main()
     for (unsigned int i = 0; i < ports.size(); i++) {
         cout << "\tPort name: " << ports.at(i) << endl;
     }
+    SerialPortWrapper *serial = new SerialPortWrapper("COM4", 115200);
 
-    // connection
-
-        SerialPortWrapper *serial = new SerialPortWrapper("COM4", 115200);
- //       serial->openPort();
-        string line;
- //       while(1){
- //           serial->readLineFromPort(&line);
- //           if (line.length() > 0){
- //               cout << line << endl;
- //           }
- //       }
- //       serial->closePort();
-
-
-
-
-
-    menu();
+    string line;
     vector<string> datas;
     char user_input;
+
+    menu();
 
     while (user_input != 'e') {
         cin >> user_input;
@@ -81,10 +68,7 @@ int main()
                 break;
             case 'c' : serial->closePort();
                 break;
-            case 'l' : list_data();
-                for (int i = 0; i < datas.size(); ++i) {
-                    cout << datas.at(i) << endl;
-                }
+            case 'l' : list_data(datas);
                 break;
             //case 'e' : exit(0);
         }
