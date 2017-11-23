@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <windows.h>
 
 #include "SerialPortWrapper.h"
 
@@ -21,6 +22,21 @@ void menu() {
     << endl;
 }
 
+/*void start_stop_logging() {
+    while(1){
+        serial->readLineFromPort(&line);
+        if (line.length() > 0){
+        cout << line << endl;
+        }
+    }
+
+}*/
+
+void list_data() {
+
+
+}
+
 
 int main()
 {
@@ -32,7 +48,7 @@ int main()
 
     // connection
 
- /*       SerialPortWrapper *serial = new SerialPortWrapper("COM4", 115200);
+        SerialPortWrapper *serial = new SerialPortWrapper("COM4", 115200);
         serial->openPort();
         string line;
         while(1){
@@ -42,9 +58,24 @@ int main()
         }
         }
         serial->closePort();
- */
+
+
+
+
 
     menu();
+    vector<string> datas;
+    char user_input;
+    cin >> user_input;
+    switch(user_input) {
+        case 'h' : menu();
+        case 'o' : serial->openPort();
+//        case 's' : start_stop_logging();
+        case 'c' : serial->closePort();
+        case 'l' : list_data();
+        case 'e' : exit(0);
+    }
+
 
     return 0;
 }
