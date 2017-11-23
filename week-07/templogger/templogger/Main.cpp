@@ -42,19 +42,18 @@ int main()
 
     string line;
     vector<string> datas;
-    char user_input;
+    string user_input;
 
     menu();
 
-    while (user_input != 'e') {
-        cin >> user_input;
-        switch(user_input) {
-            case 'h' : menu();
-                break;
-            case 'o' : serial->openPort();
-                break;
-            case 's' :
-                while(1) {
+    while (user_input != "e") {
+        getline(cin, user_input);
+        if (user_input == "h") {
+            menu();
+        } else if (user_input == "o") {
+            serial->openPort();
+        } else if (user_input == "s") {
+            while(1) {
                     serial->readLineFromPort(&line);
                     if (line.length() > 0){
                         datas.push_back(line);
@@ -65,12 +64,10 @@ int main()
                         }
                     }
                 }
-                break;
-            case 'c' : serial->closePort();
-                break;
-            case 'l' : list_data(datas);
-                break;
-            //case 'e' : exit(0);
+        } else if (user_input == "c") {
+            serial->closePort();
+        } else if (user_input == "l") {
+            list_data(datas);
         }
     }
 
