@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <windows.h>
+#include <conio.h>
+#include <stdio.h>
 
 #include "SerialPortWrapper.h"
 
@@ -22,20 +23,11 @@ void menu() {
     << endl;
 }
 
-/*void start_stop_logging() {
-    while(1){
-        serial->readLineFromPort(&line);
-        if (line.length() > 0){
-        cout << line << endl;
-        }
-    }
-
-}*/
-
 void list_data() {
 
 
 }
+
 
 
 int main()
@@ -49,15 +41,15 @@ int main()
     // connection
 
         SerialPortWrapper *serial = new SerialPortWrapper("COM4", 115200);
-        serial->openPort();
+ //       serial->openPort();
         string line;
-        while(1){
-        serial->readLineFromPort(&line);
-        if (line.length() > 0){
-        cout << line << endl;
-        }
-        }
-        serial->closePort();
+ //       while(1){
+ //           serial->readLineFromPort(&line);
+ //           if (line.length() > 0){
+ //               cout << line << endl;
+ //           }
+ //       }
+ //       serial->closePort();
 
 
 
@@ -66,16 +58,37 @@ int main()
     menu();
     vector<string> datas;
     char user_input;
-    cin >> user_input;
-    switch(user_input) {
-        case 'h' : menu();
-        case 'o' : serial->openPort();
-//        case 's' : start_stop_logging();
-        case 'c' : serial->closePort();
-        case 'l' : list_data();
-        case 'e' : exit(0);
-    }
 
+    while (user_input != 'e') {
+        cin >> user_input;
+        switch(user_input) {
+            case 'h' : menu();
+                break;
+            case 'o' : serial->openPort();
+                break;
+            case 's' :
+                while(1) {
+                    serial->readLineFromPort(&line);
+                    if (line.length() > 0){
+                        datas.push_back(line);
+                    }
+                    if(kbhit()) {
+                        if (getchar() == 's') {
+                        break;
+                        }
+                    }
+                }
+                break;
+            case 'c' : serial->closePort();
+                break;
+            case 'l' : list_data();
+                for (int i = 0; i < datas.size(); ++i) {
+                    cout << datas.at(i) << endl;
+                }
+                break;
+            //case 'e' : exit(0);
+        }
+    }
 
     return 0;
 }
