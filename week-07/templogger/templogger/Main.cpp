@@ -48,9 +48,7 @@ void menu() {
     << "  ==============================\n"
     << "  Commands:\n"
     << "  h        Show command list\n"
-    << "  o        Open port\n"
     << "  s        Start logging / Stop logging\n"
-    << "  c        Close port\n"
     << "  l        List after error handling\n"
     << "  e        Exit from the program\n"
     << endl;
@@ -58,12 +56,12 @@ void menu() {
 
 void list_data(vector<temprec> datas) {
     for (unsigned int i = 0; i < datas.size(); ++i) {
-        cout << "Timestamp is: " << datas[i].timestamp << "\t Temperature is: " << datas[i].temperature << endl;
+        cout << "Timestamp is: " << datas[i].timestamp << "  Temperature is: " << datas[i].temperature << endl;
         time_t t = datas[i].timestamp;
         struct tm *tm = localtime(&t);
-        char date[30];
-        strftime(date, sizeof(date), "%c", tm);
-        cout << "Date/Time in normal time is (mm/dd/yy): " << date << "\t Temperature is: " << datas[i].temperature << endl;
+        char date[20];
+        strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", tm);
+        cout << "Date/Time in normal time is: " << date << "  Temperature is: " << datas[i].temperature << endl;
     }
 }
 
@@ -88,11 +86,10 @@ int main()
         getline(cin, user_input);
         if (user_input == "h") {
             menu();
-        } else if (user_input == "o") {
-            cout << "Port status: OPEN!" << endl;
-            serial->openPort();
         } else if (user_input == "s") {
             cout << "Logging datas!" << endl;
+            cout << "Port status: OPEN!" << endl;
+            serial->openPort();
             while(1) {
                 serial->readLineFromPort(&line);
                 if (line.length() > 0) {
@@ -106,19 +103,16 @@ int main()
                 if(kbhit()) {
                     if (getchar() == 's') {
                         cout << "Finished logging!" << endl;
+                        cout << "Port status: CLOSED!" << endl;
+                        serial->closePort();
                         break;
                     }
                 }
             }
-        } else if (user_input == "c") {
-            cout << "Port status: CLOSED!" << endl;
-            serial->closePort();
         } else if (user_input == "l") {
             list_data(datas);
         } else if (user_input == "e") {
             cout << "Good Bye!" << endl;
-        } else {
-            cout << "Not a valid command!" << endl;
         }
     }
 
