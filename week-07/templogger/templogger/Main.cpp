@@ -58,12 +58,12 @@ void menu() {
 
 void list_data(vector<temprec> datas) {
     for (unsigned int i = 0; i < datas.size(); ++i) {
-        cout << datas[i].timestamp << " ::: " << datas[i].temperature << endl;
+        cout << "Timestamp is: " << datas[i].timestamp << "\t Temperature is: " << datas[i].temperature << endl;
         time_t t = datas[i].timestamp;
         struct tm *tm = localtime(&t);
-        char date[20];
-        strftime(date, sizeof(date), "%Y-%m-%d", tm);
-        cout << date << " ::: " << datas[i].temperature << endl;
+        char date[30];
+        strftime(date, sizeof(date), "%c", tm);
+        cout << "Date/Time in normal time is (mm/dd/yy): " << date << "\t Temperature is: " << datas[i].temperature << endl;
     }
 }
 
