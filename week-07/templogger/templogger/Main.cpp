@@ -35,6 +35,8 @@ temprec stringcheck(string line) {
 	rec.temperature = temperature;
 	rec.timestamp = timestamp;
 	cout << rec.timestamp << " ::: " << rec.temperature << endl;
+
+
 	return rec;
 }
 
@@ -56,7 +58,12 @@ void menu() {
 
 void list_data(vector<temprec> datas) {
     for (unsigned int i = 0; i < datas.size(); ++i) {
-        cout << datas[i].timestamp << datas[i].temperature << endl;
+        cout << datas[i].timestamp << " ::: " << datas[i].temperature << endl;
+        time_t t = datas[i].timestamp;
+        struct tm *tm = localtime(&t);
+        char date[20];
+        strftime(date, sizeof(date), "%Y-%m-%d", tm);
+        cout << date << " ::: " << datas[i].temperature << endl;
     }
 }
 
@@ -73,7 +80,6 @@ int main()
     vector<temprec> datas;
     string user_input;
     string date, time;
-//  int temperature;
 
     menu();
 
@@ -89,14 +95,14 @@ int main()
             cout << "Logging datas!" << endl;
             while(1) {
                 serial->readLineFromPort(&line);
-                if (line.length() > 0){
+                if (line.length() > 0) {
                     try {
                         datas.push_back(stringcheck(line));
                     }
                     catch (const char *exc) {
                         cout << "Error: " << line << endl;
                     }
-            }
+                }
                 if(kbhit()) {
                     if (getchar() == 's') {
                         cout << "Finished logging!" << endl;
