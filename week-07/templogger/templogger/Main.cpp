@@ -50,7 +50,7 @@ void menu() {
     << "  h        Show command list\n"
     << "  s        Start logging / Stop logging\n"
     << "  l        List after error handling\n"
-    << "  e        Exit from the program\n"
+    << "  e        Exit from the program"
     << endl;
 }
 
@@ -87,8 +87,10 @@ int main()
         if (user_input == "h") {
             menu();
         } else if (user_input == "s") {
-            cout << "Logging datas!" << endl;
-            cout << "Port status: OPEN!" << endl;
+            cout
+            << "Logging datas!\n
+            << "Port status: OPEN!"
+            << endl;
             serial->openPort();
             while(1) {
                 serial->readLineFromPort(&line);
@@ -102,8 +104,10 @@ int main()
                 }
                 if(kbhit()) {
                     if (getchar() == 's') {
-                        cout << "Finished logging!" << endl;
-                        cout << "Port status: CLOSED!" << endl;
+                        cout
+                        << "Finished logging!\n"
+                        << "Port status: CLOSED!"
+                        << endl;
                         serial->closePort();
                         break;
                     }
