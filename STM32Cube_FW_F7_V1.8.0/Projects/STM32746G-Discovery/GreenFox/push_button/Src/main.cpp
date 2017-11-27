@@ -98,11 +98,12 @@ int main(void)
   
   /* Add your application code here     */
   /* Infinite loop */
+
   while (1)
   {
 	  //TODO:
 	  //Write a simple program witch flashes(toggle) the led when the button is pressed
-	  if (BSP_PB_GetState(BUTTON_KEY) == true) {
+	  if (BSP_PB_GetState(BUTTON_KEY)) {
 		  HAL_Delay(200);
 		  BSP_LED_Toggle(LED_GREEN);
 	  }
