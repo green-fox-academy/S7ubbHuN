@@ -99,7 +99,8 @@ int main(void)
   {
 	  //TODO:
 	  //Flash the ledwith 200 ms period time
-
+	  BSP_LED_Toggle(LED_GREEN);
+	  HAL_Delay(200);
   }
 }
 
