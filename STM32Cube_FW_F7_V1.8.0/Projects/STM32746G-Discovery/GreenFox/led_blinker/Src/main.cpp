@@ -166,29 +166,47 @@ int main(void)
 	  //Flash the ledwith 200 ms period time
 	  //BSP_LED_Toggle(LED_GREEN);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
 	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
 	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
 	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
 	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
 	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_3);
-	HAL_Delay(200);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_3);
+	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
+	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
+	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
   }
 }
 
