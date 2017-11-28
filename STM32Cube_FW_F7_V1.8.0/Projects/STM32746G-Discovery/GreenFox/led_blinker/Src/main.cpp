@@ -201,9 +201,6 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-	  //TODO:
-	  //Flash the ledwith 200 ms period time
-	  //BSP_LED_Toggle(LED_GREEN);
 	/*HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
@@ -249,11 +246,14 @@ int main(void)
 
 	for (int i = 0; i < 8; ++i) {
 		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
-		HAL_Delay(200);
+		HAL_Delay(100);
 		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
 	}
-
-
+	for (int i = 6; i > 0; --i) {
+		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+		HAL_Delay(100);
+		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+	}
   }
 }
 
