@@ -93,7 +93,7 @@ int main(void)
   /* Add your application code here     */
   //BSP_LED_Init(LED_GREEN);
   //BSP_LED_On(LED_GREEN);
-  	  BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
+  //BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOC_CLK_ENABLE();
@@ -211,12 +211,12 @@ int main(void)
 
 	while (1) {
 		if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
-			for (int i = 0; i < 8; ++i) {
+			for (int i = 0; i < 8; i++) {
 				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
 				HAL_Delay(100);
 				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
 			}
-			for (int i = 6; i > 0; --i) {
+			for (int i = 6; i > 0; i--) {
 				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
 				HAL_Delay(100);
 				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
