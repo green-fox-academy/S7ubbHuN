@@ -91,16 +91,104 @@ int main(void)
 
 
   /* Add your application code here     */
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_On(LED_GREEN);
+  //BSP_LED_Init(LED_GREEN);
+  //BSP_LED_On(LED_GREEN);
+
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+	__HAL_RCC_GPIOG_CLK_ENABLE();
+	__HAL_RCC_GPIOH_CLK_ENABLE();
+	__HAL_RCC_GPIOI_CLK_ENABLE();
+
+	GPIO_InitTypeDef led1;
+	led1.Pin = GPIO_PIN_7;
+	led1.Mode = GPIO_MODE_OUTPUT_PP;
+	led1.Pull = GPIO_PULLDOWN;
+	led1.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led2;
+	led2.Pin = GPIO_PIN_6;
+	led2.Mode = GPIO_MODE_OUTPUT_PP;
+	led2.Pull = GPIO_PULLDOWN;
+	led2.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led3;
+	led3.Pin = GPIO_PIN_6;
+	led3.Mode = GPIO_MODE_OUTPUT_PP;
+	led3.Pull = GPIO_PULLDOWN;
+	led3.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led4;
+	led4.Pin = GPIO_PIN_4;
+	led4.Mode = GPIO_MODE_OUTPUT_PP;
+	led4.Pull = GPIO_PULLDOWN;
+	led4.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led5;
+	led5.Pin = GPIO_PIN_7;
+	led5.Mode = GPIO_MODE_OUTPUT_PP;
+	led5.Pull = GPIO_PULLDOWN;
+	led5.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led6;
+	led6.Pin = GPIO_PIN_0;
+	led6.Mode = GPIO_MODE_OUTPUT_PP;
+	led6.Pull = GPIO_PULLDOWN;
+	led6.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led7;
+	led7.Pin = GPIO_PIN_6;
+	led7.Mode = GPIO_MODE_OUTPUT_PP;
+	led7.Pull = GPIO_PULLDOWN;
+	led7.Speed = GPIO_SPEED_HIGH;
+
+	GPIO_InitTypeDef led8;
+	led8.Pin = GPIO_PIN_3;
+	led8.Mode = GPIO_MODE_OUTPUT_PP;
+	led8.Pull = GPIO_PULLDOWN;
+	led8.Speed = GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(GPIOC, &led1);
+	HAL_GPIO_Init(GPIOC, &led2);
+	HAL_GPIO_Init(GPIOG, &led3);
+	HAL_GPIO_Init(GPIOB, &led4);
+	HAL_GPIO_Init(GPIOG, &led5);
+	HAL_GPIO_Init(GPIOI, &led6);
+	HAL_GPIO_Init(GPIOH, &led7);
+	HAL_GPIO_Init(GPIOI, &led8);
+
+
 
   /* Infinite loop */
   while (1)
   {
 	  //TODO:
 	  //Flash the ledwith 200 ms period time
-	  BSP_LED_Toggle(LED_GREEN);
-	  HAL_Delay(200);
+	  //BSP_LED_Toggle(LED_GREEN);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
+	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
+	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
+	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
+	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_3);
+	HAL_Delay(200);
+	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_3);
   }
 }
 
