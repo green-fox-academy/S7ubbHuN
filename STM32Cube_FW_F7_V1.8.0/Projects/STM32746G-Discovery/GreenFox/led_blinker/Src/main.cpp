@@ -93,6 +93,7 @@ int main(void)
   /* Add your application code here     */
   //BSP_LED_Init(LED_GREEN);
   //BSP_LED_On(LED_GREEN);
+  	  BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOC_CLK_ENABLE();
@@ -148,6 +149,12 @@ int main(void)
 	led7.Pull = GPIO_PULLDOWN;
 	led7.Speed = GPIO_SPEED_HIGH;
 
+	GPIO_InitTypeDef button0;
+	button0.Pin = GPIO_PIN_2;
+	button0.Mode = GPIO_MODE_INPUT;
+	button0.Pull = GPIO_PULLUP;
+	button0.Speed = GPIO_SPEED_HIGH;
+
 	HAL_GPIO_Init(GPIOC, &led0);
 	HAL_GPIO_Init(GPIOC, &led1);
 	HAL_GPIO_Init(GPIOG, &led2);
@@ -156,6 +163,7 @@ int main(void)
 	HAL_GPIO_Init(GPIOI, &led5);
 	HAL_GPIO_Init(GPIOH, &led6);
 	HAL_GPIO_Init(GPIOI, &led7);
+	HAL_GPIO_Init(GPIOI, &button0);
 
 
 	struct LED {
@@ -199,62 +207,22 @@ int main(void)
 
 
   /* Infinite loop */
-  while (1)
-  {
-	/*HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
-	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
-	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
-	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_3);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_3);
-	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_6);
-	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_0);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_7);
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);*/
 
-	for (int i = 0; i < 8; ++i) {
-		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
-		HAL_Delay(100);
-		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+
+	while (1) {
+		if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+			for (int i = 0; i < 8; ++i) {
+				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+				HAL_Delay(100);
+				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+			}
+			for (int i = 6; i > 0; --i) {
+				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+				HAL_Delay(100);
+				HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+			}
+		}
 	}
-	for (int i = 6; i > 0; --i) {
-		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
-		HAL_Delay(100);
-		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
-	}
-  }
 }
 
 /**
