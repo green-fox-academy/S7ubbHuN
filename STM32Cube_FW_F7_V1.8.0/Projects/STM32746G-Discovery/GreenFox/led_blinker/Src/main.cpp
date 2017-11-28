@@ -100,8 +100,14 @@ int main(void)
 	__HAL_RCC_GPIOH_CLK_ENABLE();
 	__HAL_RCC_GPIOI_CLK_ENABLE();
 
+	GPIO_InitTypeDef led0;
+	led0.Pin = GPIO_PIN_7;
+	led0.Mode = GPIO_MODE_OUTPUT_PP;
+	led0.Pull = GPIO_PULLDOWN;
+	led0.Speed = GPIO_SPEED_HIGH;
+
 	GPIO_InitTypeDef led1;
-	led1.Pin = GPIO_PIN_7;
+	led1.Pin = GPIO_PIN_6;
 	led1.Mode = GPIO_MODE_OUTPUT_PP;
 	led1.Pull = GPIO_PULLDOWN;
 	led1.Speed = GPIO_SPEED_HIGH;
@@ -113,50 +119,83 @@ int main(void)
 	led2.Speed = GPIO_SPEED_HIGH;
 
 	GPIO_InitTypeDef led3;
-	led3.Pin = GPIO_PIN_6;
+	led3.Pin = GPIO_PIN_4;
 	led3.Mode = GPIO_MODE_OUTPUT_PP;
 	led3.Pull = GPIO_PULLDOWN;
 	led3.Speed = GPIO_SPEED_HIGH;
 
 	GPIO_InitTypeDef led4;
-	led4.Pin = GPIO_PIN_4;
+	led4.Pin = GPIO_PIN_7;
 	led4.Mode = GPIO_MODE_OUTPUT_PP;
 	led4.Pull = GPIO_PULLDOWN;
 	led4.Speed = GPIO_SPEED_HIGH;
 
 	GPIO_InitTypeDef led5;
-	led5.Pin = GPIO_PIN_7;
+	led5.Pin = GPIO_PIN_0;
 	led5.Mode = GPIO_MODE_OUTPUT_PP;
 	led5.Pull = GPIO_PULLDOWN;
 	led5.Speed = GPIO_SPEED_HIGH;
 
 	GPIO_InitTypeDef led6;
-	led6.Pin = GPIO_PIN_0;
+	led6.Pin = GPIO_PIN_6;
 	led6.Mode = GPIO_MODE_OUTPUT_PP;
 	led6.Pull = GPIO_PULLDOWN;
 	led6.Speed = GPIO_SPEED_HIGH;
 
 	GPIO_InitTypeDef led7;
-	led7.Pin = GPIO_PIN_6;
+	led7.Pin = GPIO_PIN_3;
 	led7.Mode = GPIO_MODE_OUTPUT_PP;
 	led7.Pull = GPIO_PULLDOWN;
 	led7.Speed = GPIO_SPEED_HIGH;
 
-	GPIO_InitTypeDef led8;
-	led8.Pin = GPIO_PIN_3;
-	led8.Mode = GPIO_MODE_OUTPUT_PP;
-	led8.Pull = GPIO_PULLDOWN;
-	led8.Speed = GPIO_SPEED_HIGH;
-
+	HAL_GPIO_Init(GPIOC, &led0);
 	HAL_GPIO_Init(GPIOC, &led1);
-	HAL_GPIO_Init(GPIOC, &led2);
-	HAL_GPIO_Init(GPIOG, &led3);
-	HAL_GPIO_Init(GPIOB, &led4);
-	HAL_GPIO_Init(GPIOG, &led5);
-	HAL_GPIO_Init(GPIOI, &led6);
-	HAL_GPIO_Init(GPIOH, &led7);
-	HAL_GPIO_Init(GPIOI, &led8);
+	HAL_GPIO_Init(GPIOG, &led2);
+	HAL_GPIO_Init(GPIOB, &led3);
+	HAL_GPIO_Init(GPIOG, &led4);
+	HAL_GPIO_Init(GPIOI, &led5);
+	HAL_GPIO_Init(GPIOH, &led6);
+	HAL_GPIO_Init(GPIOI, &led7);
 
+
+	struct LED {
+		GPIO_TypeDef* LED_port;
+		uint16_t LED_pin;
+	};
+	struct LED L0;
+	L0.LED_port = GPIOC;
+	L0.LED_pin = GPIO_PIN_7;
+	struct LED L1;
+	L1.LED_port = GPIOC;
+	L1.LED_pin = GPIO_PIN_6;
+	struct LED L2;
+	L2.LED_port = GPIOG;
+	L2.LED_pin = GPIO_PIN_6;
+	struct LED L3;
+	L3.LED_port = GPIOB;
+	L3.LED_pin = GPIO_PIN_4;
+	struct LED L4;
+	L4.LED_port = GPIOG;
+	L4.LED_pin = GPIO_PIN_7;
+	struct LED L5;
+	L5.LED_port = GPIOI;
+	L5.LED_pin = GPIO_PIN_0;
+	struct LED L6;
+	L6.LED_port = GPIOH;
+	L6.LED_pin = GPIO_PIN_6;
+	struct LED L7;
+	L7.LED_port = GPIOI;
+	L7.LED_pin = GPIO_PIN_3;
+
+	struct LED led_array[8];
+	led_array[0] = L0;
+	led_array[1] = L1;
+	led_array[2] = L2;
+	led_array[3] = L3;
+	led_array[4] = L4;
+	led_array[5] = L5;
+	led_array[6] = L6;
+	led_array[7] = L7;
 
 
   /* Infinite loop */
@@ -165,7 +204,7 @@ int main(void)
 	  //TODO:
 	  //Flash the ledwith 200 ms period time
 	  //BSP_LED_Toggle(LED_GREEN);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+	/*HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	HAL_Delay(100);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
@@ -206,7 +245,15 @@ int main(void)
 	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_6);
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
 	HAL_Delay(100);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);*/
+
+	for (int i = 0; i < 8; ++i) {
+		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+		HAL_Delay(200);
+		HAL_GPIO_TogglePin(led_array[i].LED_port,led_array[i].LED_pin);
+	}
+
+
   }
 }
 
