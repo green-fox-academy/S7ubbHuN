@@ -224,41 +224,33 @@ int main(void)
 	led_array[6] = L6;
 	led_array[7] = L7;
 
-
-  /* Infinite loop */
-
+// loop for counting binaries
 
 	while (1) {
-		if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
-			for (int n = 1; n < 256; n++) {
-				int x = DecimalToBinary(n);
-				int counter = 0;
-				int rem;
-				while (x!=0) {
+			if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+				for (int n = 1; n < 256; n++) {
+					int number = n;
+					int counter = 0;
+					int rem = 0;
+					while(number != 0) {
+					        rem = number % 2;
+					        number = number / 2;
 
-				        rem = x%10;
-				        x /= 10;
+					        if (rem == 1) {
+					        	HAL_GPIO_WritePin(led_array[counter].LED_port,led_array[counter].LED_pin,GPIO_PIN_SET);
+					        	//HAL_Delay(1);
 
-				        if (rem == 1) {
-				        	HAL_GPIO_WritePin(led_array[counter].LED_port,led_array[counter].LED_pin,GPIO_PIN_SET);
-				        	//HAL_Delay(1000);
-				        	//HAL_GPIO_TogglePin(led_array[counter].LED_port,led_array[counter].LED_pin);
-				        	HAL_Delay(1);
-
-				        }
-				        counter++;
+					        }
+					        counter++;
+					}
+					HAL_Delay(500);
+					for (int j = 0; j < 8; j++) {
+						HAL_GPIO_WritePin(led_array[j].LED_port,led_array[j].LED_pin,GPIO_PIN_RESET);
+					}
+					HAL_Delay(200);
 				}
-				HAL_Delay(1000);
-				for (int j = 0; j < 8; j++) {
-					HAL_GPIO_WritePin(led_array[j].LED_port,led_array[j].LED_pin,GPIO_PIN_RESET);
-				}
-				HAL_Delay(500);
 			}
-
 		}
-	}
-
-
 }
 
 /**
