@@ -52,6 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
 
+
 /* Private function prototypes -----------------------------------------------*/
 
 #ifdef __GNUC__
@@ -69,6 +70,9 @@ static void CPU_CACHE_Enable(void);
 
 /* Private functions ---------------------------------------------------------*/
 RNG_HandleTypeDef rnd;
+unsigned int button_press_counter;
+uint32_t press_timer;
+
 /**
  * @brief  Main program
  * @param  None
@@ -78,20 +82,14 @@ int randomnum() {
 	return HAL_RNG_GetRandomNumber(&rnd);
 }
 
-
-void delay_ms (uint32_t t) {
-  uint32_t start, end;
-  start = HAL_GetTick();
-  end = start + t;
-  if (start < end) {
-      while ((HAL_GetTick() >= start) && (HAL_GetTick() < end)) {
-        // do nothing
-      }
-    } else {
-      while ((HAL_GetTick() >= start) || (HAL_GetTick() < end)) {
-        // do nothing
-      };
-    }
+void my_delay (uint32_t t) {
+	for (unsigned int i = t; i > 0; i--) {
+		HAL_Delay(1);
+		if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+			button_press_counter++;
+			press_timer = HAL_GetTick();
+		}
+	}
 }
 
 
@@ -250,11 +248,39 @@ int main(void) {
 	led_array[5] = L6;
 	led_array[6] = L7;
 
+	uint32_t good = 1;
+	uint32_t bad = 4;
+	button_press_counter = 0;
+
+	//new working method - whack a LED type
 	while (1) {
 		uint32_t num = (1000 + randomnum() % 1000);
 		uint32_t begin = 0;
-
+		uint32_t reaction = 0;
 		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) != 0) {
+			HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_RESET);
+		}
+		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+		}
+		HAL_Delay(2000);
+		HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_SET);
+		begin = HAL_GetTick();
+		my_delay(num);
+		HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_RESET);
+		if (button_press_counter > 0) {
+			HAL_GPIO_WritePin(led_array[good].LED_port,led_array[good].LED_pin, GPIO_PIN_SET);
+			good++;
+			reaction = press_timer - begin;
+			printf("Your reaction time is: %lu ms.\n", reaction);
+			button_press_counter = 0;
+		} else {
+			HAL_GPIO_WritePin(led_array[bad].LED_port,led_array[bad].LED_pin, GPIO_PIN_SET);
+			bad++;
+		}
+
+		// original working method - watches reacton
+
+		/*while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) != 0) {
 			HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_SET);
 		}
 		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
@@ -264,9 +290,20 @@ int main(void) {
 		begin = HAL_GetTick();
 		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) != 0) {
 		}
-		printf("Your reaction time is: %u ms.\n", HAL_GetTick() - begin);
+		reaction = HAL_GetTick() - begin;
+		printf("Your reaction time is: %u ms.\n", reaction);
 		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
 		}
+
+		if (reaction < 200) {
+			HAL_GPIO_WritePin(led_array[good].LED_port,led_array[good].LED_pin, GPIO_PIN_SET);
+			good++;
+			if ()
+		} else {
+			HAL_GPIO_WritePin(led_array[bad].LED_port,led_array[bad].LED_pin, GPIO_PIN_SET);
+			bad++;
+		}*/
+
 		HAL_Delay(3000);
 	}
 
