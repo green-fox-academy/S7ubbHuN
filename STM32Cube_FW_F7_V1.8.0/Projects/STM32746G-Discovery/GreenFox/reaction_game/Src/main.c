@@ -235,8 +235,11 @@ int main(void) {
 	while (1) {
 
 		if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
-			printf("%i\n", randomnum());
-			HAL_Delay(2000);
+			HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_SET);
+			printf("%u\n", (1000 + randomnum() % 1000));
+			HAL_Delay(1000 + randomnum() % 1000);
+			HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_RESET);
+			HAL_Delay(100);
 		}
 	}
 }
