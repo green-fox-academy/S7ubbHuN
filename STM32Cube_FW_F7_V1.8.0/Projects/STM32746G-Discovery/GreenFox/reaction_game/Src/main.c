@@ -78,6 +78,23 @@ int randomnum() {
 	return HAL_RNG_GetRandomNumber(&rnd);
 }
 
+
+void delay_ms (uint32_t t) {
+  uint32_t start, end;
+  start = HAL_GetTick();
+  end = start + t;
+  if (start < end) {
+      while ((HAL_GetTick() >= start) && (HAL_GetTick() < end)) {
+        // do nothing
+      }
+    } else {
+      while ((HAL_GetTick() >= start) || (HAL_GetTick() < end)) {
+        // do nothing
+      };
+    }
+}
+
+
 int main(void) {
 	/* This project template calls firstly two functions in order to configure MPU feature
 	 and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
@@ -118,6 +135,7 @@ int main(void) {
 
 	rnd.Instance = RNG;
 	HAL_RNG_Init(&rnd);
+
 
 	/* Output a message using printf function */
 	printf("\n------------------WELCOME------------------\r\n");
@@ -183,6 +201,7 @@ int main(void) {
 	button0.Pull = GPIO_PULLUP;
 	button0.Speed = GPIO_SPEED_HIGH;
 
+
 	//HAL_GPIO_Init(GPIOC, &led0);
 	HAL_GPIO_Init(GPIOC, &led1);
 	HAL_GPIO_Init(GPIOG, &led2);
@@ -193,13 +212,12 @@ int main(void) {
 	HAL_GPIO_Init(GPIOI, &led7);
 	HAL_GPIO_Init(GPIOI, &button0);
 
+
 	struct LED {
 		GPIO_TypeDef* LED_port;
 		uint16_t LED_pin;
 	};
-	/*struct LED L0;
-	 L0.LED_port = GPIOC;
-	 L0.LED_pin = GPIO_PIN_7;*/
+
 	struct LED L1;
 	L1.LED_port = GPIOC;
 	L1.LED_pin = GPIO_PIN_6;
@@ -233,15 +251,26 @@ int main(void) {
 	led_array[6] = L7;
 
 	while (1) {
+		uint32_t num = (1000 + randomnum() % 1000);
+		uint32_t begin = 0;
 
-		if (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) != 0) {
 			HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_SET);
-			printf("%u\n", (1000 + randomnum() % 1000));
-			HAL_Delay(1000 + randomnum() % 1000);
-			HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_RESET);
-			HAL_Delay(100);
 		}
+		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+		}
+		HAL_Delay(num);
+		HAL_GPIO_WritePin(led_array[0].LED_port,led_array[0].LED_pin, GPIO_PIN_RESET);
+		begin = HAL_GetTick();
+		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) != 0) {
+		}
+		printf("Your reaction time is: %u ms.\n", HAL_GetTick() - begin);
+		while (HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_2) == 0) {
+		}
+		HAL_Delay(3000);
 	}
+
+
 }
 /**
  * @brief  Retargets the C library printf function to the USART.
