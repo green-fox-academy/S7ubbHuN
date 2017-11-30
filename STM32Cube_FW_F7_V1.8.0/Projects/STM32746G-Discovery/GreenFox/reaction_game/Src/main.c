@@ -273,9 +273,18 @@ int main(void) {
 			reaction = press_timer - begin;
 			printf("Your reaction time is: %lu ms.\n", reaction);
 			button_press_counter = 0;
+			if (good == 4) {
+				printf("You WON!!!\nPlease reset the game!\n");
+				break;
+			}
 		} else {
 			HAL_GPIO_WritePin(led_array[bad].LED_port,led_array[bad].LED_pin, GPIO_PIN_SET);
 			bad++;
+			printf("Lost one life, try again!\n");
+			if (bad == 7) {
+				printf("You lost, you MORON!!!\nPlease reset the game!\n");
+				break;
+			}
 		}
 
 		// original working method - watches reacton
