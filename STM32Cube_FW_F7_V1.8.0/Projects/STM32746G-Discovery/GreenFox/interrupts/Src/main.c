@@ -48,14 +48,133 @@
  */
 
 /* Private typedef -----------------------------------------------------------*/
+TIM_HandleTypeDef    Time_handle;           //the timer's config structure
+TIM_HandleTypeDef Sensor_Time_handle;
+TIM_OC_InitTypeDef sConfig;
+GPIO_InitTypeDef led;
+GPIO_InitTypeDef tda0;
+GPIO_InitTypeDef fan;
+GPIO_InitTypeDef sensor;
+
+
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
 
-volatile uint32_t timIntPeriod;
 
 /* Private function prototypes -----------------------------------------------*/
+void TIM3_IRQHandler();
+void EXTI2_IRQHandler();
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+
+
+void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+
+	led.Pin = pin_number;
+	led.Mode = GPIO_MODE_OUTPUT_PP;
+	led.Pull = GPIO_PULLUP;
+	led.Speed = GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(port, &led);      // initialize the pin on GPIOA port with HAL
+}
+
+void Sensor_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+	sensor.Pin = pin_number;
+	sensor. Mode = GPIO_MODE_AF_PP;
+	sensor. Pull = GPIO_PULLUP;
+	sensor.Speed = GPIO_SPEED_FAST;
+	sensor.Alternate = GPIO_AF2_TIM3;
+
+	HAL_GPIO_Init(GPIOB, &sensor);
+}
+
+void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+
+	led.Pin = pin_number;
+	led.Mode = GPIO_MODE_AF_PP;
+	led.Pull = GPIO_NOPULL;
+	led.Speed = GPIO_SPEED_HIGH;
+	led.Alternate = GPIO_AF1_TIM2;
+
+	HAL_GPIO_Init(port, &led);     // initialize the pin on GPIOA port with HAL
+}
+
+void PWM_FAN_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+
+	fan.Pin = pin_number;
+	fan.Mode = GPIO_MODE_AF_PP;
+	fan.Pull = GPIO_PULLUP;
+	fan.Speed = GPIO_SPEED_HIGH;
+	fan.Alternate = GPIO_AF1_TIM2;
+
+	HAL_GPIO_Init(port, &fan);     // initialize the pin on GPIOA port with HAL
+}
+
+void Button1_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+
+		GPIO_InitTypeDef conf1;                // create the configuration struct
+		conf1.Pin = pin_number;
+		conf1.Pull = GPIO_PULLUP;
+		conf1.Speed = GPIO_SPEED_FAST;         // port speed to fast
+		conf1.Mode = GPIO_MODE_IT_RISING;
+
+		HAL_GPIO_Init(port, &conf1);          // call the HAL init
+}
+
+void Button2_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+
+		GPIO_InitTypeDef conf2;                // create the configuration struct
+		conf2.Pin = pin_number;
+		conf2.Pull = GPIO_PULLUP;
+		conf2.Speed = GPIO_SPEED_FAST;         // port speed to fast
+		conf2.Mode = GPIO_MODE_IT_RISING;
+
+		HAL_GPIO_Init(port, &conf2);          // call the HAL init
+}
+
+
+
+void Base_Timer() {
+
+	Time_handle.Instance               = TIM1;
+	Time_handle.Init.Period            = 4000;
+	Time_handle.Init.Prescaler         = 54000;
+	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+
+	  HAL_TIM_Base_Init(&Time_handle);
+	  HAL_TIM_Base_Start_IT(&Time_handle);
+}
+
+void Sensor_Timer() {
+
+	Time_handle.Instance               = TIM1;
+	Time_handle.Init.Period            = 1000;
+	Time_handle.Init.Prescaler         = 50000;
+	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+
+	  HAL_TIM_Base_Init(&Sensor_Time_handle);
+	  HAL_TIM_Base_Start_IT(&Sensor_Time_handle);
+}
+
+void PWM_timer() {
+
+	Time_handle.Instance               = TIM2;
+	Time_handle.Init.Period            = 1000;
+	Time_handle.Init.Prescaler         = 50000;
+	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_DOWN;
+
+	  sConfig.OCMode = TIM_OCMODE_PWM1;
+	  sConfig.Pulse = 0;
+
+	  HAL_TIM_PWM_Init(&Time_handle);
+	  HAL_TIM_PWM_ConfigChannel(&Time_handle, &sConfig, TIM_CHANNEL_1);
+	  HAL_TIM_PWM_Start(&Time_handle, TIM_CHANNEL_1);
+}
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -69,6 +188,7 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -101,11 +221,12 @@ int main(void) {
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
 
-	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
-
 	/* Add your application code here
 	 */
 	BSP_LED_Init(LED_GREEN);
+	/**
+		 * Configure UART
+		 */
 
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
@@ -117,13 +238,68 @@ int main(void) {
 	BSP_COM_Init(COM1, &uart_handle);
 
 
+	__HAL_RCC_GPIOF_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOI_CLK_ENABLE();
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+
+	PWM_FAN_ini(GPIOA, GPIO_PIN_15);
+	PWM_timer();
+	Sensor_Timer();
+	Sensor_ini(GPIOA, GPIO_PIN_0);
+	Button1_ini(GPIOI, GPIO_PIN_2);
+	Button2_ini(GPIOI, GPIO_PIN_3);
+
+	HAL_NVIC_SetPriority(EXTI2_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+	HAL_NVIC_SetPriority(EXTI3_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("**********in STATIC interrupts WS**********\r\n\n");
 
+		while (1) {
 
-	while (1) {
-	}
+		}
 }
+
+void TIM3_IRQHandler() {
+	HAL_TIM_IRQHandler(&Sensor_Time_handle);
+}
+
+void EXTI2_IRQHandler() {
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
+}
+
+void EXTI3_IRQHandler() {
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	if (GPIO_Pin == GPIO_PIN_2) {
+		if (TIM2->CCR1 <= 995) {
+			TIM2->CCR1 += 5;
+			printf("%lu\n", TIM2->CCR1);
+		}
+	} else if (GPIO_Pin == GPIO_PIN_3) {
+		if (TIM2->CCR1 >= 5) {
+			TIM2->CCR1 -= 5;
+			printf("%lu\n", TIM2->CCR1);
+		}
+	}
+
+}
+
+void
+
+
+
 
 /**
  * @brief  Retargets the C library printf function to the USART.
