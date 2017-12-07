@@ -51,6 +51,7 @@
 TIM_HandleTypeDef    Time_handle;           //the timer's config structure
 TIM_HandleTypeDef Sensor_Time_handle;
 TIM_OC_InitTypeDef sConfig;
+TIM_OC_InitTypeDef Sensor_Config;
 GPIO_InitTypeDef led;
 GPIO_InitTypeDef tda0;
 GPIO_InitTypeDef fan;
@@ -67,7 +68,7 @@ UART_HandleTypeDef uart_handle;
 void TIM3_IRQHandler();
 void EXTI2_IRQHandler();
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void HAL_TIM_PulseFinishedCallback(TIM_HandleTypeDef *Sensor_Time_handle);
 
 
 void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
@@ -82,15 +83,15 @@ void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
 
 void Sensor_ini(GPIO_TypeDef *port, uint32_t pin_number) {
 	sensor.Pin = pin_number;
-	sensor. Mode = GPIO_MODE_AF_PP;
-	sensor. Pull = GPIO_PULLUP;
+	sensor.Mode = GPIO_MODE_AF_PP;
+	sensor.Pull = GPIO_PULLUP;
 	sensor.Speed = GPIO_SPEED_FAST;
 	sensor.Alternate = GPIO_AF2_TIM3;
 
-	HAL_GPIO_Init(GPIOB, &sensor);
+	HAL_GPIO_Init(port, &sensor);
 }
 
-void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
+void PWM_LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
 
 	led.Pin = pin_number;
 	led.Mode = GPIO_MODE_AF_PP;
@@ -144,20 +145,23 @@ void Base_Timer() {
 	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
 	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
 
-	  HAL_TIM_Base_Init(&Time_handle);
-	  HAL_TIM_Base_Start_IT(&Time_handle);
+	HAL_TIM_Base_Init(&Time_handle);
+	HAL_TIM_Base_Start_IT(&Time_handle);
 }
 
 void Sensor_Timer() {
 
-	Time_handle.Instance               = TIM1;
-	Time_handle.Init.Period            = 1000;
-	Time_handle.Init.Prescaler         = 50000;
-	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+	Sensor_Time_handle.Instance               = TIM3;
+	Sensor_Time_handle.Init.Period            = 1000;
+	Sensor_Time_handle.Init.Prescaler         = 50000;
+	Sensor_Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	Sensor_Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
 
-	  HAL_TIM_Base_Init(&Sensor_Time_handle);
-	  HAL_TIM_Base_Start_IT(&Sensor_Time_handle);
+	//HAL_TIM_Base_Init(&Sensor_Time_handle);
+	//HAL_TIM_Base_Start_IT(&Sensor_Time_handle);
+	HAL_TIM_IC_Init(&Sensor_Time_handle);
+	HAL_TIM_IC_ConfigChannel(&Sensor_Time_handle, &sConfig, TIM_CHANNEL_1);
+	HAL_TIM_IC_Start_IT(&Sensor_Time_handle, TIM_CHANNEL_1);
 }
 
 void PWM_timer() {
@@ -188,7 +192,9 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
-
+int Pulse_counter = 0;
+uint32_t Timer_start = 0;
+uint32_t Timer_end = 0;
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -242,13 +248,15 @@ int main(void) {
 	__HAL_RCC_GPIOC_CLK_ENABLE();
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOI_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_TIM2_CLK_ENABLE();
+	__HAL_RCC_TIM3_CLK_ENABLE();
 
 
 	PWM_FAN_ini(GPIOA, GPIO_PIN_15);
 	PWM_timer();
 	Sensor_Timer();
-	Sensor_ini(GPIOA, GPIO_PIN_0);
+	Sensor_ini(GPIOB, GPIO_PIN_4);
 	Button1_ini(GPIOI, GPIO_PIN_2);
 	Button2_ini(GPIOI, GPIO_PIN_3);
 
@@ -258,7 +266,7 @@ int main(void) {
 	HAL_NVIC_SetPriority(EXTI3_IRQn, 0x0F, 0x00);
 	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x00);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x01);
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
 	printf("\n-----------------WELCOME-----------------\r\n");
@@ -296,7 +304,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
 }
 
-void
+void HAL_TIM_PulseFinishedCallback (TIM_HandleTypeDef *Sensor_Time_handle) {
+	Pulse_counter++;
+
+	if (Pulse_counter == 1) {
+		Timer_start = HAL_GetTick();
+	}
+	if (Pulse_counter == 4) {
+			Timer_end = HAL_GetTick();
+			printf("RPM: %lu\n", (Timer_end - Timer_start));
+			Timer_start = 0;
+			Timer_end = 0;
+			Pulse_counter = 0;
+	}
+}
 
 
 
