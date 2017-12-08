@@ -51,11 +51,27 @@
 TIM_HandleTypeDef    Time_handle;           //the timer's config structure
 TIM_HandleTypeDef Sensor_Time_handle;
 TIM_OC_InitTypeDef sConfig;
-TIM_OC_InitTypeDef Sensor_Config;
+TIM_IC_InitTypeDef Sensor_Config;
 GPIO_InitTypeDef led;
 GPIO_InitTypeDef tda0;
 GPIO_InitTypeDef fan;
 GPIO_InitTypeDef sensor;
+volatile int user_set_state = 0;
+volatile int temp_speed = 0;
+volatile int period_elapsed = 0;
+
+/* Captured Values */
+volatile uint32_t               uwIC2Value1 = 0;
+volatile uint32_t               uwIC2Value2 = 0;
+volatile uint32_t               uwDiffCapture = 0;
+
+/* Capture index */
+volatile uint16_t               uhCaptureIndex = 0;
+
+/* Frequency Value */
+volatile uint32_t               uwFrequency = 0;
+
+
 
 
 /* Private define ------------------------------------------------------------*/
@@ -68,7 +84,8 @@ UART_HandleTypeDef uart_handle;
 void TIM3_IRQHandler();
 void EXTI2_IRQHandler();
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void HAL_TIM_PulseFinishedCallback(TIM_HandleTypeDef *Sensor_Time_handle);
+//void HAL_TIM_PulseFinishedCallback(TIM_HandleTypeDef *Sensor_Time_handle);
+
 
 
 void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
@@ -137,7 +154,7 @@ void Button2_ini(GPIO_TypeDef *port, uint32_t pin_number) {
 
 
 
-void Base_Timer() {
+/*void Base_Timer() {
 
 	Time_handle.Instance               = TIM1;
 	Time_handle.Init.Period            = 4000;
@@ -147,20 +164,23 @@ void Base_Timer() {
 
 	HAL_TIM_Base_Init(&Time_handle);
 	HAL_TIM_Base_Start_IT(&Time_handle);
-}
+}*/
 
 void Sensor_Timer() {
 
 	Sensor_Time_handle.Instance               = TIM3;
 	Sensor_Time_handle.Init.Period            = 1000;
-	Sensor_Time_handle.Init.Prescaler         = 50000;
+	Sensor_Time_handle.Init.Prescaler         = 0xFFFF;
 	Sensor_Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
 	Sensor_Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
 
-	//HAL_TIM_Base_Init(&Sensor_Time_handle);
-	//HAL_TIM_Base_Start_IT(&Sensor_Time_handle);
+	Sensor_Config.ICPolarity = TIM_ICPOLARITY_RISING;
+	Sensor_Config.ICSelection = TIM_ICSELECTION_DIRECTTI;
+	Sensor_Config.ICPrescaler = TIM_ICPSC_DIV1;
+	Sensor_Config.ICFilter = 0;
+
 	HAL_TIM_IC_Init(&Sensor_Time_handle);
-	HAL_TIM_IC_ConfigChannel(&Sensor_Time_handle, &sConfig, TIM_CHANNEL_1);
+	HAL_TIM_IC_ConfigChannel(&Sensor_Time_handle, &Sensor_Config, TIM_CHANNEL_1);
 	HAL_TIM_IC_Start_IT(&Sensor_Time_handle, TIM_CHANNEL_1);
 }
 
@@ -255,8 +275,8 @@ int main(void) {
 
 	PWM_FAN_ini(GPIOA, GPIO_PIN_15);
 	PWM_timer();
-	Sensor_Timer();
 	Sensor_ini(GPIOB, GPIO_PIN_4);
+	Sensor_Timer();
 	Button1_ini(GPIOI, GPIO_PIN_2);
 	Button2_ini(GPIOI, GPIO_PIN_3);
 
@@ -272,9 +292,19 @@ int main(void) {
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("**********in STATIC interrupts WS**********\r\n\n");
 
-		while (1) {
+	while (1)
+		  {
 
-		}
+			  printf("uwFrequency: %lu\n", uwFrequency);
+			  printf("uwDiffCapture: %lu\n", uwDiffCapture);
+			  printf("uwIC2Value1: %lu\n", uwIC2Value1);
+			  printf("uwIC2Value2: %lu\n", uwIC2Value2);
+			  printf("========================\n");
+
+			  //printf("tim2 ccr: %lu\n", TIM2->CCR1);
+			  HAL_Delay(500);
+
+		  }
 }
 
 void TIM3_IRQHandler() {
@@ -291,34 +321,67 @@ void EXTI3_IRQHandler() {
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if (GPIO_Pin == GPIO_PIN_2) {
-		if (TIM2->CCR1 <= 995) {
-			TIM2->CCR1 += 5;
+		if (TIM2->CCR1 <= 980) {
+			TIM2->CCR1 += 20;
 			printf("%lu\n", TIM2->CCR1);
 		}
 	} else if (GPIO_Pin == GPIO_PIN_3) {
-		if (TIM2->CCR1 >= 5) {
-			TIM2->CCR1 -= 5;
+		if (TIM2->CCR1 >= 20) {
+			TIM2->CCR1 -= 20;
 			printf("%lu\n", TIM2->CCR1);
 		}
 	}
 
 }
 
-void HAL_TIM_PulseFinishedCallback (TIM_HandleTypeDef *Sensor_Time_handle) {
-	Pulse_counter++;
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+  {
+	  if (TIM2->CNT >= 500 || TIM2->CNT <= 100)
+		  uhCaptureIndex = 0;
 
-	if (Pulse_counter == 1) {
-		Timer_start = HAL_GetTick();
-	}
-	if (Pulse_counter == 4) {
-			Timer_end = HAL_GetTick();
-			printf("RPM: %lu\n", (Timer_end - Timer_start));
-			Timer_start = 0;
-			Timer_end = 0;
-			Pulse_counter = 0;
-	}
+	  if (TIM2->CNT < 500 && TIM2->CNT > 100) {
+		if(uhCaptureIndex == 0)
+		{
+		  /* Get the 1st Input Capture value */
+		  uwIC2Value1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+		  period_elapsed = 0;
+		  uhCaptureIndex = 1;
+		}
+		else if(uhCaptureIndex == 1)
+		{
+		  /* Get the 2nd Input Capture value */
+		  uwIC2Value2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1) /*+ period_elapsed * 0xFFFF*/;
+
+		  /* Capture computation */
+		  if (uwIC2Value2 > uwIC2Value1)
+		  {
+			uwDiffCapture = (uwIC2Value2 /*+ (period_elapsed * 0xFFFF)*/ - uwIC2Value1);
+			//printf("case 1 < 2\n");
+		  }
+		  else if (uwIC2Value2 < uwIC2Value1)
+		  {
+			/* 0xFFFF is max TIM3_CCRx value */
+			//period_elapsed = period_elapsed - 1;
+			uwDiffCapture = ((0xFFFF - uwIC2Value1) + uwIC2Value2 /*+ period_elapsed * 0xFFFF*/) + 1;
+			//printf("case 1 > 2\n");
+		  }
+		  else
+		  {
+			/* If capture values are equal, we have reached the limit of frequency
+			   measures */
+			Error_Handler();
+		  }
+		  /* Frequency computation: for this example TIMx (TIM3) is clocked by
+			 2xAPB1Clk */
+		  uwFrequency = 10000 / uwDiffCapture;
+		  uhCaptureIndex = 0;
+		  period_elapsed = 0;
+		}
+	  }
+  }
 }
-
 
 
 
