@@ -142,6 +142,7 @@ int main(void) {
 	while (1) {
 		Read_Input(User_Input);
 		Write_Output(User_Input);
+
 		User_Input[0] = '\0';
 	}
 
