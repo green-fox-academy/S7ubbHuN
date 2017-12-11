@@ -38,6 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
+#include <stdio.h>
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -51,7 +52,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
-
+void Read_Input(char *Input);
+void Write_Output(char *Input);
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -75,6 +77,27 @@ static void CPU_CACHE_Enable(void);
  * @param  None
  * @retval None
  */
+
+void Read_Input(char *Input) {
+	unsigned int size = 0;
+	Input[0] = '\0';
+
+	do {
+		HAL_UART_Receive(&uart_handle, (uint8_t *) &Input[size], 1, HAL_MAX_DELAY);
+		size++;
+	} while (Input[size-1] != '\n');
+
+	Input[size] = '\0';
+}
+
+void Write_Output(char *Input) {
+	unsigned int i = 0;
+	while (Input[i] != '\0') {
+		HAL_UART_Transmit(&uart_handle, (uint8_t *) &Input[i], 1, 0xFFFF);
+		i++;
+	}
+}
+
 
 int main(void) {
 	/* This project template calls firstly two functions in order to configure MPU feature
@@ -133,6 +156,8 @@ int main(void) {
 	HAL_GPIO_Init(GPIOB, &RX);
 	HAL_UART_Init(&uart_handle);
 
+	BSP_LED_Init(LED_GREEN);
+
 	char User_Input[100];
 
 	/* Output a message using printf function */
@@ -141,8 +166,13 @@ int main(void) {
 
 	while (1) {
 		Read_Input(User_Input);
-		Write_Output(User_Input);
+		if (strcmp (User_Input, "on\n") == 0) {
+			BSP_LED_On(LED_GREEN);
+		} else if (strcmp (User_Input, "off\n") == 0) {
+			BSP_LED_Off(LED_GREEN);
+		}
 
+		Write_Output(User_Input);
 		User_Input[0] = '\0';
 	}
 
@@ -151,27 +181,7 @@ int main(void) {
 
 }
 
-void Read_Input(char *Input)
-{
-	unsigned int size = 0;
-	Input[0] = '\0';
 
-	do {
-		HAL_UART_Receive(&uart_handle, (uint8_t *) &Input[size], 1, HAL_MAX_DELAY);
-		size++;
-	} while (Input[size-1] != '\n');
-
-	Input[size] = '\0';
-}
-
-void Write_Output(char *Input)
-{
-	unsigned int i = 0;
-	while (Input[i] != '\0') {
-		HAL_UART_Transmit(&uart_handle, (uint8_t *) &Input[i], 1, 0xFFFF);
-		i++;
-	}
-}
 
 
 /**
