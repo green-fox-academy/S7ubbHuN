@@ -135,10 +135,17 @@ int main(void) {
 
 	GPIO_InitTypeDef TX;
 	GPIO_InitTypeDef RX;
+	GPIO_InitTypeDef RED_LED;
 
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
 	__HAL_RCC_USART1_CLK_ENABLE();
+
+	RED_LED.Pin = GPIO_PIN_7;
+	RED_LED.Mode = GPIO_MODE_OUTPUT_PP;
+	RED_LED.Speed = GPIO_SPEED_FAST;
+	RED_LED.Pull = GPIO_PULLUP;
 
 	TX.Pin = GPIO_PIN_9;
 	TX.Mode = GPIO_MODE_AF_PP;
@@ -154,6 +161,7 @@ int main(void) {
 
 	HAL_GPIO_Init(GPIOA, &TX);
 	HAL_GPIO_Init(GPIOB, &RX);
+	HAL_GPIO_Init(GPIOC, &RED_LED);
 	HAL_UART_Init(&uart_handle);
 
 	BSP_LED_Init(LED_GREEN);
@@ -170,6 +178,13 @@ int main(void) {
 			BSP_LED_On(LED_GREEN);
 		} else if (strcmp (User_Input, "off\n") == 0) {
 			BSP_LED_Off(LED_GREEN);
+		} else {
+			for (int i = 0; i < 3; i++) {
+				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_SET);
+				HAL_Delay(500);
+				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_RESET);
+				HAL_Delay(500);
+			}
 		}
 
 		Write_Output(User_Input);
