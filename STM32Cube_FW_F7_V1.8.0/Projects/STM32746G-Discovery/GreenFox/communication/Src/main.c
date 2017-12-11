@@ -46,34 +46,7 @@
 /** @addtogroup Templates
  * @{
  */
-
 /* Private typedef -----------------------------------------------------------*/
-TIM_HandleTypeDef    Time_handle;           //the timer's config structure
-TIM_HandleTypeDef Sensor_Time_handle;
-TIM_OC_InitTypeDef sConfig;
-TIM_IC_InitTypeDef Sensor_Config;
-GPIO_InitTypeDef led;
-GPIO_InitTypeDef tda0;
-GPIO_InitTypeDef fan;
-GPIO_InitTypeDef sensor;
-volatile int user_set_state = 0;
-volatile int temp_speed = 0;
-volatile int period_elapsed = 0;
-
-/* Captured Values */
-volatile uint32_t               uwIC2Value1 = 0;
-volatile uint32_t               uwIC2Value2 = 0;
-volatile uint32_t               uwDiffCapture = 0;
-
-/* Capture index */
-volatile uint16_t               uhCaptureIndex = 0;
-
-/* Frequency Value */
-volatile uint32_t               uwFrequency = 0;
-
-
-
-
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -81,124 +54,6 @@ UART_HandleTypeDef uart_handle;
 
 
 /* Private function prototypes -----------------------------------------------*/
-void TIM3_IRQHandler();
-void EXTI2_IRQHandler();
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-//void HAL_TIM_PulseFinishedCallback(TIM_HandleTypeDef *Sensor_Time_handle);
-
-
-
-void LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
-
-	led.Pin = pin_number;
-	led.Mode = GPIO_MODE_OUTPUT_PP;
-	led.Pull = GPIO_PULLUP;
-	led.Speed = GPIO_SPEED_HIGH;
-
-	HAL_GPIO_Init(port, &led);      // initialize the pin on GPIOA port with HAL
-}
-
-void Sensor_ini(GPIO_TypeDef *port, uint32_t pin_number) {
-	sensor.Pin = pin_number;
-	sensor.Mode = GPIO_MODE_AF_PP;
-	sensor.Pull = GPIO_PULLUP;
-	sensor.Speed = GPIO_SPEED_FAST;
-	sensor.Alternate = GPIO_AF2_TIM3;
-
-	HAL_GPIO_Init(port, &sensor);
-}
-
-void PWM_LED_ini(GPIO_TypeDef *port, uint32_t pin_number) {
-
-	led.Pin = pin_number;
-	led.Mode = GPIO_MODE_AF_PP;
-	led.Pull = GPIO_NOPULL;
-	led.Speed = GPIO_SPEED_HIGH;
-	led.Alternate = GPIO_AF1_TIM2;
-
-	HAL_GPIO_Init(port, &led);     // initialize the pin on GPIOA port with HAL
-}
-
-void PWM_FAN_ini(GPIO_TypeDef *port, uint32_t pin_number) {
-
-	fan.Pin = pin_number;
-	fan.Mode = GPIO_MODE_AF_PP;
-	fan.Pull = GPIO_PULLUP;
-	fan.Speed = GPIO_SPEED_HIGH;
-	fan.Alternate = GPIO_AF1_TIM2;
-
-	HAL_GPIO_Init(port, &fan);     // initialize the pin on GPIOA port with HAL
-}
-
-void Button1_ini(GPIO_TypeDef *port, uint32_t pin_number) {
-
-		GPIO_InitTypeDef conf1;                // create the configuration struct
-		conf1.Pin = pin_number;
-		conf1.Pull = GPIO_PULLUP;
-		conf1.Speed = GPIO_SPEED_FAST;         // port speed to fast
-		conf1.Mode = GPIO_MODE_IT_RISING;
-
-		HAL_GPIO_Init(port, &conf1);          // call the HAL init
-}
-
-void Button2_ini(GPIO_TypeDef *port, uint32_t pin_number) {
-
-		GPIO_InitTypeDef conf2;                // create the configuration struct
-		conf2.Pin = pin_number;
-		conf2.Pull = GPIO_PULLUP;
-		conf2.Speed = GPIO_SPEED_FAST;         // port speed to fast
-		conf2.Mode = GPIO_MODE_IT_RISING;
-
-		HAL_GPIO_Init(port, &conf2);          // call the HAL init
-}
-
-
-
-/*void Base_Timer() {
-
-	Time_handle.Instance               = TIM1;
-	Time_handle.Init.Period            = 4000;
-	Time_handle.Init.Prescaler         = 54000;
-	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
-
-	HAL_TIM_Base_Init(&Time_handle);
-	HAL_TIM_Base_Start_IT(&Time_handle);
-}*/
-
-void Sensor_Timer() {
-
-	Sensor_Time_handle.Instance               = TIM3;
-	Sensor_Time_handle.Init.Period            = 1000;
-	Sensor_Time_handle.Init.Prescaler         = 0xFFFF;
-	Sensor_Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-	Sensor_Time_handle.Init.CounterMode       = TIM_COUNTERMODE_UP;
-
-	Sensor_Config.ICPolarity = TIM_ICPOLARITY_RISING;
-	Sensor_Config.ICSelection = TIM_ICSELECTION_DIRECTTI;
-	Sensor_Config.ICPrescaler = TIM_ICPSC_DIV1;
-	Sensor_Config.ICFilter = 0;
-
-	HAL_TIM_IC_Init(&Sensor_Time_handle);
-	HAL_TIM_IC_ConfigChannel(&Sensor_Time_handle, &Sensor_Config, TIM_CHANNEL_1);
-	HAL_TIM_IC_Start_IT(&Sensor_Time_handle, TIM_CHANNEL_1);
-}
-
-void PWM_timer() {
-
-	Time_handle.Instance               = TIM2;
-	Time_handle.Init.Period            = 1000;
-	Time_handle.Init.Prescaler         = 50000;
-	Time_handle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-	Time_handle.Init.CounterMode       = TIM_COUNTERMODE_DOWN;
-
-	  sConfig.OCMode = TIM_OCMODE_PWM1;
-	  sConfig.Pulse = 0;
-
-	  HAL_TIM_PWM_Init(&Time_handle);
-	  HAL_TIM_PWM_ConfigChannel(&Time_handle, &sConfig, TIM_CHANNEL_1);
-	  HAL_TIM_PWM_Start(&Time_handle, TIM_CHANNEL_1);
-}
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -212,9 +67,6 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
-int Pulse_counter = 0;
-uint32_t Timer_start = 0;
-uint32_t Timer_end = 0;
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -223,6 +75,7 @@ uint32_t Timer_end = 0;
  * @param  None
  * @retval None
  */
+
 int main(void) {
 	/* This project template calls firstly two functions in order to configure MPU feature
 	 and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
@@ -249,11 +102,7 @@ int main(void) {
 
 	/* Add your application code here
 	 */
-	BSP_LED_Init(LED_GREEN);
-	/**
-		 * Configure UART
-		 */
-
+	uart_handle.Instance = USART1;
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
 	uart_handle.Init.StopBits = UART_STOPBITS_1;
@@ -261,128 +110,67 @@ int main(void) {
 	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	uart_handle.Init.Mode = UART_MODE_TX_RX;
 
-	BSP_COM_Init(COM1, &uart_handle);
+	GPIO_InitTypeDef TX;
+	GPIO_InitTypeDef RX;
 
-
-	__HAL_RCC_GPIOF_CLK_ENABLE();
-	__HAL_RCC_GPIOC_CLK_ENABLE();
 	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOI_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_TIM2_CLK_ENABLE();
-	__HAL_RCC_TIM3_CLK_ENABLE();
+	__HAL_RCC_USART1_CLK_ENABLE();
 
+	TX.Pin = GPIO_PIN_9;
+	TX.Mode = GPIO_MODE_AF_PP;
+	TX.Speed = GPIO_SPEED_FAST;
+	TX.Pull = GPIO_PULLUP;
+	TX.Alternate = GPIO_AF7_USART1;
 
-	PWM_FAN_ini(GPIOA, GPIO_PIN_15);
-	PWM_timer();
-	Sensor_ini(GPIOB, GPIO_PIN_4);
-	Sensor_Timer();
-	Button1_ini(GPIOI, GPIO_PIN_2);
-	Button2_ini(GPIOI, GPIO_PIN_3);
+	RX.Pin = GPIO_PIN_7;
+	RX.Mode = GPIO_MODE_AF_PP;
+	RX.Speed = GPIO_SPEED_FAST;
+	RX.Pull = GPIO_PULLUP;
+	RX.Alternate = GPIO_AF7_USART1;
 
-	HAL_NVIC_SetPriority(EXTI2_IRQn, 0x0F, 0x00);
-	HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+	HAL_GPIO_Init(GPIOA, &TX);
+	HAL_GPIO_Init(GPIOB, &RX);
+	HAL_UART_Init(&uart_handle);
 
-	HAL_NVIC_SetPriority(EXTI3_IRQn, 0x0F, 0x00);
-	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+	char User_Input[100];
 
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x01);
-	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	/* Output a message using printf function */
+	printf("\n---------------------WELCOME--------------------\r\n");
+	printf("**********in STATIC Communication Lecture**********\r\n\n");
 
-	printf("\n-----------------WELCOME-----------------\r\n");
-	printf("**********in STATIC interrupts WS**********\r\n\n");
-
-	while (1)
-		  {
-
-			  /*printf("uwFrequency: %lu\n", uwFrequency);
-			  printf("uwDiffCapture: %lu\n", uwDiffCapture);
-			  printf("uwIC2Value1: %lu\n", uwIC2Value1);
-			  printf("uwIC2Value2: %lu\n", uwIC2Value2);
-			  printf("========================\n");
-
-			  //printf("tim2 ccr: %lu\n", TIM2->CCR1);
-			  HAL_Delay(500);*/
-
-		  }
-}
-
-void TIM3_IRQHandler() {
-	HAL_TIM_IRQHandler(&Sensor_Time_handle);
-}
-
-void EXTI2_IRQHandler() {
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
-}
-
-void EXTI3_IRQHandler() {
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	if (GPIO_Pin == GPIO_PIN_2) {
-		if (TIM2->CCR1 <= 980) {
-			TIM2->CCR1 += 20;
-			printf("%lu\n", TIM2->CCR1);
-		}
-	} else if (GPIO_Pin == GPIO_PIN_3) {
-		if (TIM2->CCR1 >= 20) {
-			TIM2->CCR1 -= 20;
-			printf("%lu\n", TIM2->CCR1);
-		}
+	while (1) {
+		Read_Input(User_Input);
+		Write_Output(User_Input);
+		User_Input[0] = '\0';
 	}
 
+
+
+
 }
 
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+void Read_Input(char *Input)
 {
-  if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
-  {
-	  if (TIM2->CNT >= 500 || TIM2->CNT <= 100)
-		  uhCaptureIndex = 0;
+	unsigned int size = 0;
+	Input[0] = '\0';
 
-	  if (TIM2->CNT < 500 && TIM2->CNT > 100) {
-		if(uhCaptureIndex == 0)
-		{
-		  /* Get the 1st Input Capture value */
-		  uwIC2Value1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-		  period_elapsed = 0;
-		  uhCaptureIndex = 1;
-		}
-		else if(uhCaptureIndex == 1)
-		{
-		  /* Get the 2nd Input Capture value */
-		  uwIC2Value2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1) /*+ period_elapsed * 0xFFFF*/;
+	do {
+		HAL_UART_Receive(&uart_handle, (uint8_t *) &Input[size], 1, HAL_MAX_DELAY);
+		size++;
+	} while (Input[size-1] != '\n');
 
-		  /* Capture computation */
-		  if (uwIC2Value2 > uwIC2Value1)
-		  {
-			uwDiffCapture = (uwIC2Value2 /*+ (period_elapsed * 0xFFFF)*/ - uwIC2Value1);
-			//printf("case 1 < 2\n");
-		  }
-		  else if (uwIC2Value2 < uwIC2Value1)
-		  {
-			/* 0xFFFF is max TIM3_CCRx value */
-			//period_elapsed = period_elapsed - 1;
-			uwDiffCapture = ((0xFFFF - uwIC2Value1) + uwIC2Value2 /*+ period_elapsed * 0xFFFF*/) + 1;
-			//printf("case 1 > 2\n");
-		  }
-		  else
-		  {
-			/* If capture values are equal, we have reached the limit of frequency
-			   measures */
-			Error_Handler();
-		  }
-		  /* Frequency computation: for this example TIMx (TIM3) is clocked by
-			 2xAPB1Clk */
-		  uwFrequency = 10000 / uwDiffCapture;
-		  uhCaptureIndex = 0;
-		  period_elapsed = 0;
-		}
-	  }
-  }
+	Input[size] = '\0';
 }
 
+void Write_Output(char *Input)
+{
+	unsigned int i = 0;
+	while (Input[i] != '\0') {
+		HAL_UART_Transmit(&uart_handle, (uint8_t *) &Input[i], 1, 0xFFFF);
+		i++;
+	}
+}
 
 
 /**
