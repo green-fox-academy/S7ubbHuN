@@ -189,7 +189,10 @@ void I2C1_EV_IRQHandler() {
 }
 
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
-	HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
+	HAL_I2C_Master_Receive_IT(&I2cHandle, (0b1001000<<1), &bufferR, 1);
+}
+
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	printf("The current temperature is: %u\n", bufferR);
 }
 
