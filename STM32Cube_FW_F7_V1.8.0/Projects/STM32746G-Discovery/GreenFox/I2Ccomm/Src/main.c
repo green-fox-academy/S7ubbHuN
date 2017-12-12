@@ -59,6 +59,8 @@ uint8_t bufferR;
 
 /* Private function prototypes -----------------------------------------------*/
 
+
+
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
  set to 'Yes') calls __io_putchar() */
@@ -73,6 +75,8 @@ static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 
 /* Private functions ---------------------------------------------------------*/
+
+
 
 /**
  * @brief  Main program
@@ -159,6 +163,9 @@ int main(void) {
 	HAL_GPIO_Init(GPIOB, &RX);
 	HAL_UART_Init(&uart_handle);
 
+	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 14, 0x00);
+	HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
+
 
 
 	/* Output a message using printf function */
@@ -166,17 +173,25 @@ int main(void) {
 	printf("**********in STATIC I2C_Communication Lecture**********\r\n\n");
 
 	while (1) {
-		HAL_I2C_Master_Transmit(&I2cHandle, (0b1001000<<1), &bufferT, 1, 100);
-		HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
-		printf("The current temperature is: %u\n", bufferR);
+		//HAL_I2C_Master_Transmit(&I2cHandle, (0b1001000<<1), &bufferT, 1, 100);
+		//HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
+		//printf("The current temperature is: %u\n", bufferR);
+
+		HAL_I2C_Master_Transmit_IT(&I2cHandle, (0b1001000<<1), &bufferT, 1);
+
+		//printf("The current temperature is: %u\n", bufferR);
 		HAL_Delay(1000);
+
 	}
-
-
-
+}
+void I2C1_EV_IRQHandler() {
+	HAL_I2C_EV_IRQHandler(&I2cHandle);
 }
 
-
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
+	HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
+	printf("The current temperature is: %u\n", bufferR);
+}
 
 
 /**
