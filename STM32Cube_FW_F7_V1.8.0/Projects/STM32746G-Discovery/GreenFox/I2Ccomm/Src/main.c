@@ -80,23 +80,11 @@ static void CPU_CACHE_Enable(void);
  */
 
 void Read_Input(char *Input) {
-	unsigned int size = 0;
-	Input[0] = '\0';
 
-	do {
-		HAL_UART_Receive(&uart_handle, (uint8_t *) &Input[size], 1, HAL_MAX_DELAY);
-		size++;
-	} while (Input[size-1] != '\n');
-
-	Input[size] = '\0';
 }
 
 void Write_Output(char *Input) {
-	unsigned int i = 0;
-	while (Input[i] != '\0') {
-		HAL_UART_Transmit(&uart_handle, (uint8_t *) &Input[i], 1, 0xFFFF);
-		i++;
-	}
+
 }
 
 
