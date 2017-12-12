@@ -51,10 +51,11 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-//UART_HandleTypeDef uart_handle;
+UART_HandleTypeDef uart_handle;
 I2C_HandleTypeDef I2cHandle;
-void Read_Input(char *Input);
-void Write_Output(char *Input);
+uint8_t bufferT;
+uint8_t bufferR;
+
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -78,15 +79,6 @@ static void CPU_CACHE_Enable(void);
  * @param  None
  * @retval None
  */
-
-void Read_Input(char *Input) {
-
-}
-
-void Write_Output(char *Input) {
-
-}
-
 
 int main(void) {
 	/* This project template calls firstly two functions in order to configure MPU feature
@@ -114,23 +106,39 @@ int main(void) {
 
 	/* Add your application code here
 	 */
-	/*uart_handle.Instance = USART1;
+	uart_handle.Instance = USART1;
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
 	uart_handle.Init.StopBits = UART_STOPBITS_1;
 	uart_handle.Init.Parity = UART_PARITY_NONE;
 	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	uart_handle.Init.Mode = UART_MODE_TX_RX;*/
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
 
 	I2cHandle.Instance             = I2C1;
 	I2cHandle.Init.Timing          = 0x40912732;
 	I2cHandle.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
 
+	GPIO_InitTypeDef TX;
+	GPIO_InitTypeDef RX;
 	GPIO_InitTypeDef DATA;
 	GPIO_InitTypeDef CLOCK;
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_I2CB_CLK_ENABLE();
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_USART1_CLK_ENABLE();
+
+	TX.Pin = GPIO_PIN_9;
+	TX.Mode = GPIO_MODE_AF_PP;
+	TX.Speed = GPIO_SPEED_FAST;
+	TX.Pull = GPIO_PULLUP;
+	TX.Alternate = GPIO_AF7_USART1;
+
+	RX.Pin = GPIO_PIN_7;
+	RX.Mode = GPIO_MODE_AF_PP;
+	RX.Speed = GPIO_SPEED_FAST;
+	RX.Pull = GPIO_PULLUP;
+	RX.Alternate = GPIO_AF7_USART1;
 
 	DATA.Pin = GPIO_PIN_9;
 	DATA.Mode = GPIO_MODE_AF_OD;
@@ -147,32 +155,22 @@ int main(void) {
 	HAL_GPIO_Init(GPIOB, &DATA);
 	HAL_GPIO_Init(GPIOB, &CLOCK);
 	HAL_I2C_Init(&I2cHandle);
+	HAL_GPIO_Init(GPIOA, &TX);
+	HAL_GPIO_Init(GPIOB, &RX);
+	HAL_UART_Init(&uart_handle);
 
-	char User_Input[100];
+
 
 	/* Output a message using printf function */
-	printf("\n---------------------WELCOME--------------------\r\n");
-	printf("**********in STATIC Communication Lecture**********\r\n\n");
+	printf("\n-----------------------WELCOME----------------------\r\n");
+	printf("**********in STATIC I2C_Communication Lecture**********\r\n\n");
 
 	while (1) {
-		Read_Input(User_Input);
-		if (strcmp (User_Input, "on\n") == 0) {
-			BSP_LED_On(LED_GREEN);
-		} else if (strcmp (User_Input, "off\n") == 0) {
-			BSP_LED_Off(LED_GREEN);
-		} else {
-			for (int i = 0; i < 3; i++) {
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_SET);
-				HAL_Delay(500);
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_RESET);
-				HAL_Delay(500);
-			}
-		}
-
-		Write_Output(User_Input);
-		User_Input[0] = '\0';
+		HAL_I2C_Master_Transmit(&I2cHandle, (0b1001000<<1), &bufferT, 1, 100);
+		HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
+		printf("%u\n", bufferR);
+		HAL_Delay(1000);
 	}
-
 
 
 
@@ -187,8 +185,8 @@ int main(void) {
  * @retval None
  */
 PUTCHAR_PROTOTYPE {
-	/* Place your implementation of fputc here */
-	/* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+	//Place your implementation of fputc here
+	//e.g. write a character to the EVAL_COM1 and Loop until the end of transmission
 	HAL_UART_Transmit(&uart_handle, (uint8_t *) &ch, 1, 0xFFFF);
 
 	return ch;
@@ -258,6 +256,7 @@ static void SystemClock_Config(void) {
 static void Error_Handler(void) {
 	/* User may add here some code to deal with this error */
 	while (1) {
+
 	}
 }
 
