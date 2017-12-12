@@ -53,7 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
 I2C_HandleTypeDef I2cHandle;
-uint8_t bufferT;
+uint8_t bufferT = 0;
 uint8_t bufferR;
 
 
@@ -168,7 +168,7 @@ int main(void) {
 	while (1) {
 		HAL_I2C_Master_Transmit(&I2cHandle, (0b1001000<<1), &bufferT, 1, 100);
 		HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
-		printf("%u\n", bufferR);
+		printf("The current temperature is: %u\n", bufferR);
 		HAL_Delay(1000);
 	}
 
