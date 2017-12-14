@@ -34,10 +34,33 @@
  *
  ******************************************************************************
  */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
+#include <stdio.h>
+
+/** @addtogroup STM32F7xx_HAL_Examples
+ * @{
+ */
+
+/** @addtogroup Templates
+ * @{
+ */
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+
+UART_HandleTypeDef uart_handle;
+I2C_HandleTypeDef I2cHandle;
+uint8_t bufferT = 0;
+uint8_t bufferR;
+RTC_HandleTypeDef RtcHandle;
+RTC_DateTypeDef dDate;
+RTC_TimeTypeDef dTime;
+TIM_HandleTypeDef TimHandle;
+
+/* Private function prototypes -----------------------------------------------*/
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -47,22 +70,6 @@
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif /* __GNUC__ */
 
-/** @addtogroup STM32F7xx_HAL_Examples
- * @{
- */
-
-/** @addtogroup Templates
- * @{
- */
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef UartHandle;
-RTC_HandleTypeDef RtcHandle;
-
-/* Private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -73,56 +80,97 @@ static void UART_Config(void);
 static void RTC_Config(void);
 static void RTC_SetDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t weekday, uint8_t hour, uint8_t minute, uint8_t second);
 
+void Interrupt_Timer();
+void TIM2_IRQHandler();
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c);
+void I2C1_EV_IRQHandler();
+void Timestamp(RTC_DateTypeDef *sDate, RTC_TimeTypeDef *sTime);
 /* Private functions ---------------------------------------------------------*/
+
+
 
 /**
  * @brief  Main program
  * @param  None
  * @retval None
  */
+
 int main(void) {
-    Peripherials_Config();
 
-    RTC_SetDateTime(
-            17,                         // 2017
-            12,                         // december
-            14,                         // 12th
-            RTC_WEEKDAY_TUESDAY,        // tuesday
-            9,                         // hour: 13
-            54,                         // minute: 11
-            0                           // second: 0
-    );
+	Peripherials_Config();
+	UART_Config();
 
-    /**
-     * Demo for sending date and time in every second
-     */
-    RTC_DateTypeDef dDate;
-    RTC_TimeTypeDef dTime;
-    while (1) {
-        HAL_RTC_GetTime(&RtcHandle, &dTime, RTC_FORMAT_BIN);
-        HAL_RTC_GetDate(&RtcHandle, &dDate, RTC_FORMAT_BIN);
+	RTC_SetDateTime(
+			17,                         // 2017
+			12,                         // december
+			14,                         // 12th
+			RTC_WEEKDAY_TUESDAY,        // tuesday
+			9,                         // hour: 13
+			54,                         // minute: 11
+			0                           // second: 0
+	);
 
-        printf("%d.%d.%d. %d:%d:%d\r\n", (dDate.Year + 2000), dDate.Month,
-                dDate.Date, dTime.Hours, dTime.Minutes, dTime.Seconds);
 
-        HAL_Delay(1000);
-    }
+	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 14, 0x00);
+	HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
+
+
+	/* Output a message using printf function */
+	printf("\n-----------------------WELCOME----------------------\r\n");
+	printf("**********in STATIC I2C_Communication Lecture**********\r\n\n");
+
+	Interrupt_Timer();
+
+	while (1) {
+
+	}
 }
 
-/**
- * Configuring the RTC (real time clock) on the device, this setup results in correct time measurement,
- * so a second passes exactly under 1 second.
- *
- * Hint 1: the HAL_RTC_Init() calls the HAL_RTC_MspInit() function in stm32f7xx_hal_msp.c file. In that
- * function we configure the internal 32kHz oscillator and assign it to the RTC peripherial. Read
- * and understand that code!
- *
- * Hint 2: from the documentation it turns out that you need to adjust the AsynchPrediv and SynchPrediv
- * values to the oscillator to get exact time measurement (just like when you're configuring timers).
- * The current values guarantees to tick in every second:
- *
- * (AsynchPrediv+1)*(SynchPrediv+1) = 32000
- */
+void Interrupt_Timer() {
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+	TimHandle.Instance               = TIM2;
+	TimHandle.Init.Period            = 16000;
+	TimHandle.Init.Prescaler         = 6750;
+	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	TimHandle.Init.CounterMode 		 = TIM_COUNTERMODE_UP;
+	HAL_TIM_Base_Init(&TimHandle);
+	HAL_TIM_Base_Start_IT(&TimHandle);
+
+	HAL_NVIC_SetPriority(TIM2_IRQn, 15, 0x00);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+}
+
+void TIM2_IRQHandler() {
+	HAL_TIM_IRQHandler(&TimHandle);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	HAL_I2C_Master_Transmit_IT(&I2cHandle, (0b1001000<<1), &bufferT, 1);
+	Timestamp(&dDate, &dTime);
+}
+
+void I2C1_EV_IRQHandler() {
+	HAL_I2C_EV_IRQHandler(&I2cHandle);
+}
+
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
+	HAL_I2C_Master_Receive_IT(&I2cHandle, (0b1001000<<1), &bufferR, 1);
+}
+
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
+	printf("%u\n", bufferR);
+}
+
+void Timestamp(RTC_DateTypeDef *sDate, RTC_TimeTypeDef *sTime) {
+	HAL_RTC_GetTime(&RtcHandle, &dTime, RTC_FORMAT_BIN);
+	HAL_RTC_GetDate(&RtcHandle, &dDate, RTC_FORMAT_BIN);
+
+	printf("%d.%d.%d. %d:%d:%d ", (dDate.Year + 2000), dDate.Month, dDate.Date, dTime.Hours, dTime.Minutes, dTime.Seconds);
+}
+
 static void RTC_Config(void) {
     RtcHandle.Instance = RTC;
     RtcHandle.Init.HourFormat = RTC_HOURFORMAT_24;
@@ -137,8 +185,7 @@ static void RTC_Config(void) {
 /**
  * This functions configures the RTC date and time to the values specified in the parameters.
  */
-static void RTC_SetDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t weekday,
-        uint8_t hour, uint8_t minute, uint8_t second) {
+static void RTC_SetDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t weekday, uint8_t hour, uint8_t minute, uint8_t second) {
     RTC_DateTypeDef sDate;
     RTC_TimeTypeDef sTime;
 
@@ -155,6 +202,62 @@ static void RTC_SetDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t we
     sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
     sTime.StoreOperation = RTC_STOREOPERATION_RESET;
     HAL_RTC_SetTime(&RtcHandle, &sTime, RTC_FORMAT_BIN);
+}
+
+
+static void UART_Config(void) {
+	uart_handle.Instance = USART1;
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
+
+	I2cHandle.Instance             = I2C1;
+	I2cHandle.Init.Timing          = 0x40912732;
+	I2cHandle.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+
+	GPIO_InitTypeDef TX;
+	GPIO_InitTypeDef RX;
+	GPIO_InitTypeDef DATA;
+	GPIO_InitTypeDef CLOCK;
+
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_USART1_CLK_ENABLE();
+
+	TX.Pin = GPIO_PIN_9;
+	TX.Mode = GPIO_MODE_AF_PP;
+	TX.Speed = GPIO_SPEED_FAST;
+	TX.Pull = GPIO_PULLUP;
+	TX.Alternate = GPIO_AF7_USART1;
+
+	RX.Pin = GPIO_PIN_7;
+	RX.Mode = GPIO_MODE_AF_PP;
+	RX.Speed = GPIO_SPEED_FAST;
+	RX.Pull = GPIO_PULLUP;
+	RX.Alternate = GPIO_AF7_USART1;
+
+	DATA.Pin = GPIO_PIN_9;
+	DATA.Mode = GPIO_MODE_AF_OD;
+	DATA.Speed = GPIO_SPEED_FAST;
+	DATA.Pull = GPIO_PULLUP;
+	DATA.Alternate = GPIO_AF4_I2C1;
+
+	CLOCK.Pin = GPIO_PIN_8;
+	CLOCK.Mode = GPIO_MODE_AF_OD;
+	CLOCK.Speed = GPIO_SPEED_FAST;
+	CLOCK.Pull = GPIO_PULLUP;
+	CLOCK.Alternate = GPIO_AF4_I2C1;
+
+	HAL_GPIO_Init(GPIOB, &DATA);
+	HAL_GPIO_Init(GPIOB, &CLOCK);
+	HAL_I2C_Init(&I2cHandle);
+	HAL_GPIO_Init(GPIOA, &TX);
+	HAL_GPIO_Init(GPIOB, &RX);
+	HAL_UART_Init(&uart_handle);
 }
 
 static void Peripherials_Config(void) {
@@ -192,28 +295,17 @@ static void Peripherials_Config(void) {
     RTC_Config();
 }
 
-static void UART_Config(void) {
-    UartHandle.Init.BaudRate = 115200;
-    UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
-    UartHandle.Init.StopBits = UART_STOPBITS_1;
-    UartHandle.Init.Parity = UART_PARITY_NONE;
-    UartHandle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    UartHandle.Init.Mode = UART_MODE_TX_RX;
-
-    BSP_COM_Init(COM1, &UartHandle);
-}
-
 /**
  * @brief  Retargets the C library printf function to the USART.
  * @param  None
  * @retval None
  */
 PUTCHAR_PROTOTYPE {
-    /* Place your implementation of fputc here */
-    /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-    HAL_UART_Transmit(&UartHandle, (uint8_t *) &ch, 1, 0xFFFF);
+	//Place your implementation of fputc here
+	//e.g. write a character to the EVAL_COM1 and Loop until the end of transmission
+	HAL_UART_Transmit(&uart_handle, (uint8_t *) &ch, 1, 0xFFFF);
 
-    return ch;
+	return ch;
 }
 
 /**
@@ -237,39 +329,39 @@ PUTCHAR_PROTOTYPE {
  * @retval None
  */
 static void SystemClock_Config(void) {
-    RCC_ClkInitTypeDef RCC_ClkInitStruct;
-    RCC_OscInitTypeDef RCC_OscInitStruct;
+	RCC_ClkInitTypeDef RCC_ClkInitStruct;
+	RCC_OscInitTypeDef RCC_OscInitStruct;
 
-    /* Enable HSE Oscillator and activate PLL with HSE as source */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLM = 25;
-    RCC_OscInitStruct.PLL.PLLN = 432;
-    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-    RCC_OscInitStruct.PLL.PLLQ = 9;
-    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-        Error_Handler();
-    }
+	/* Enable HSE Oscillator and activate PLL with HSE as source */
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+	RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+	RCC_OscInitStruct.PLL.PLLM = 25;
+	RCC_OscInitStruct.PLL.PLLN = 432;
+	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+	RCC_OscInitStruct.PLL.PLLQ = 9;
+	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+		Error_Handler();
+	}
 
-    /* activate the OverDrive to reach the 216 Mhz Frequency */
-    if (HAL_PWREx_EnableOverDrive() != HAL_OK) {
-        Error_Handler();
-    }
+	/* activate the OverDrive to reach the 216 Mhz Frequency */
+	if (HAL_PWREx_EnableOverDrive() != HAL_OK) {
+		Error_Handler();
+	}
 
-    /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
-     clocks dividers */
-    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1
-            | RCC_CLOCKTYPE_PCLK2);
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
-        Error_Handler();
-    }
+	/* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
+	 clocks dividers */
+	RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK
+			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
+		Error_Handler();
+	}
 }
 
 /**
@@ -278,9 +370,10 @@ static void SystemClock_Config(void) {
  * @retval None
  */
 static void Error_Handler(void) {
-    /* User may add here some code to deal with this error */
-    while (1) {
-    }
+	/* User may add here some code to deal with this error */
+	while (1) {
+
+	}
 }
 
 /**
@@ -291,28 +384,28 @@ static void Error_Handler(void) {
  * @retval None
  */
 static void MPU_Config(void) {
-    MPU_Region_InitTypeDef MPU_InitStruct;
+	MPU_Region_InitTypeDef MPU_InitStruct;
 
-    /* Disable the MPU */
-    HAL_MPU_Disable();
+	/* Disable the MPU */
+	HAL_MPU_Disable();
 
-    /* Configure the MPU attributes as WT for SRAM */
-    MPU_InitStruct.Enable = MPU_REGION_ENABLE;
-    MPU_InitStruct.BaseAddress = 0x20010000;
-    MPU_InitStruct.Size = MPU_REGION_SIZE_256KB;
-    MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
-    MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
-    MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
-    MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
-    MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-    MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
-    MPU_InitStruct.SubRegionDisable = 0x00;
-    MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+	/* Configure the MPU attributes as WT for SRAM */
+	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+	MPU_InitStruct.BaseAddress = 0x20010000;
+	MPU_InitStruct.Size = MPU_REGION_SIZE_256KB;
+	MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+	MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+	MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
+	MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
+	MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+	MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+	MPU_InitStruct.SubRegionDisable = 0x00;
+	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
 
-    HAL_MPU_ConfigRegion(&MPU_InitStruct);
+	HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
-    /* Enable the MPU */
-    HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+	/* Enable the MPU */
+	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
 }
 
 /**
@@ -321,11 +414,11 @@ static void MPU_Config(void) {
  * @retval None
  */
 static void CPU_CACHE_Enable(void) {
-    /* Enable I-Cache */
-    SCB_EnableICache();
+	/* Enable I-Cache */
+	SCB_EnableICache();
 
-    /* Enable D-Cache */
-    SCB_EnableDCache();
+	/* Enable D-Cache */
+	SCB_EnableDCache();
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -339,13 +432,13 @@ static void CPU_CACHE_Enable(void) {
  */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-    /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+	/* User can add his own implementation to report the file name and line number,
+	 ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
-    /* Infinite loop */
-    while (1)
-    {
-    }
+	/* Infinite loop */
+	while (1)
+	{
+	}
 }
 #endif
 
