@@ -51,15 +51,14 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+
 UART_HandleTypeDef uart_handle;
 I2C_HandleTypeDef I2cHandle;
 uint8_t bufferT = 0;
 uint8_t bufferR;
-
+TIM_HandleTypeDef TimHandle;
 
 /* Private function prototypes -----------------------------------------------*/
-
-
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -74,6 +73,15 @@ static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 
+static void Peripherials_Config(void);
+static void UART_Config(void);
+
+void Interrupt_Timer();
+void TIM2_IRQHandler();
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c);
+void I2C1_EV_IRQHandler();
+
 /* Private functions ---------------------------------------------------------*/
 
 
@@ -85,31 +93,62 @@ static void CPU_CACHE_Enable(void);
  */
 
 int main(void) {
-	/* This project template calls firstly two functions in order to configure MPU feature
-	 and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
-	 These functions are provided as template implementation that User may integrate
-	 in his application, to enhance the performance in case of use of AXI interface
-	 with several masters. */
 
-	/* Configure the MPU attributes as Write Through */
-	MPU_Config();
+	Peripherials_Config();
+	UART_Config();
 
-	/* Enable the CPU Cache */
-	CPU_CACHE_Enable();
+	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 14, 0x00);
+	HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
 
-	/* STM32F7xx HAL library initialization:
-	 - Configure the Flash ART accelerator on ITCM interface
-	 - Configure the Systick to generate an interrupt each 1 msec
-	 - Set NVIC Group Priority to 4
-	 - Low Level Initialization
-	 */
-	HAL_Init();
 
-	/* Configure the System clock to have a frequency of 216 MHz */
-	SystemClock_Config();
+	/* Output a message using printf function */
+	printf("\n-----------------------WELCOME----------------------\r\n");
+	printf("**********in STATIC I2C_Communication Lecture**********\r\n\n");
 
-	/* Add your application code here
-	 */
+	Interrupt_Timer();
+
+	while (1) {
+
+	}
+}
+
+void Interrupt_Timer() {
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+	TimHandle.Instance               = TIM2;
+	TimHandle.Init.Period            = 16000;
+	TimHandle.Init.Prescaler         = 6750;
+	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	TimHandle.Init.CounterMode 		 = TIM_COUNTERMODE_UP;
+	HAL_TIM_Base_Init(&TimHandle);
+	HAL_TIM_Base_Start_IT(&TimHandle);
+
+	HAL_NVIC_SetPriority(TIM2_IRQn, 15, 0x00);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+}
+
+void TIM2_IRQHandler() {
+	HAL_TIM_IRQHandler(&TimHandle);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	HAL_I2C_Master_Transmit_IT(&I2cHandle, (0b1001000<<1), &bufferT, 1);
+}
+
+void I2C1_EV_IRQHandler() {
+	HAL_I2C_EV_IRQHandler(&I2cHandle);
+}
+
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
+	HAL_I2C_Master_Receive_IT(&I2cHandle, (0b1001000<<1), &bufferR, 1);
+}
+
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
+	printf("The current temperature is: %u\n", bufferR);
+}
+
+static void UART_Config(void) {
 	uart_handle.Instance = USART1;
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
@@ -162,40 +201,37 @@ int main(void) {
 	HAL_GPIO_Init(GPIOA, &TX);
 	HAL_GPIO_Init(GPIOB, &RX);
 	HAL_UART_Init(&uart_handle);
-
-	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 14, 0x00);
-	HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
-
-
-
-	/* Output a message using printf function */
-	printf("\n-----------------------WELCOME----------------------\r\n");
-	printf("**********in STATIC I2C_Communication Lecture**********\r\n\n");
-
-	while (1) {
-		//HAL_I2C_Master_Transmit(&I2cHandle, (0b1001000<<1), &bufferT, 1, 100);
-		//HAL_I2C_Master_Receive(&I2cHandle, (0b1001000<<1), &bufferR, 1, 100);
-		//printf("The current temperature is: %u\n", bufferR);
-
-		HAL_I2C_Master_Transmit_IT(&I2cHandle, (0b1001000<<1), &bufferT, 1);
-
-		//printf("The current temperature is: %u\n", bufferR);
-		HAL_Delay(1000);
-
-	}
-}
-void I2C1_EV_IRQHandler() {
-	HAL_I2C_EV_IRQHandler(&I2cHandle);
 }
 
-void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
-	HAL_I2C_Master_Receive_IT(&I2cHandle, (0b1001000<<1), &bufferR, 1);
-}
+static void Peripherials_Config(void) {
+    /* This project template calls firstly two functions in order to configure MPU feature
+     and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
+     These functions are provided as template implementation that User may integrate
+     in his application, to enhance the performance in case of use of AXI interface
+     with several masters. */
 
-void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
-	printf("The current temperature is: %u\n", bufferR);
-}
+    /* Configure the MPU attributes as Write Through */
+    MPU_Config();
 
+    /* Enable the CPU Cache */
+    CPU_CACHE_Enable();
+
+    /* STM32F7xx HAL library initialization:
+     - Configure the Flash ART accelerator on ITCM interface
+     - Configure the Systick to generate an interrupt each 1 msec
+     - Set NVIC Group Priority to 4
+     - Low Level Initialization
+     */
+    HAL_Init();
+
+    /* Configure the System clock to have a frequency of 216 MHz */
+    SystemClock_Config();
+
+    /*
+     * Configure UART
+     */
+    UART_Config();
+}
 
 /**
  * @brief  Retargets the C library printf function to the USART.
