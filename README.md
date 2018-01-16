@@ -1,6 +1,6 @@
 ### My daily works and projects.
 
-<table border="10" cellspacing="10"  align="center">
+<table border="8" cellspacing="10"  align="center">
 <tr>
 <td>
 WEEK-01
@@ -97,4 +97,5 @@ WEEK-07
 WEEK-08 - WEEK-11 (STM Projects)
 
 <ul>
-<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox>Projects</a></li>
+<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox">Projects</a></li>
+</ul>
