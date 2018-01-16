@@ -1,6 +1,6 @@
 ### My daily works and projects in Green Fox Academy.
 
-<table border="8" cellspacing="8"  align="center">
+<table border cellspacing="8"  align="center">
 <tr>
 <td>
 WEEK-01
