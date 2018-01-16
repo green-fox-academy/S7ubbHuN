@@ -1,12 +1,11 @@
-### My daily works and projects.
+### My daily works and projects in Green Fox Academy.
 
-<table border="8" cellspacing="10"  align="center">
+<table border="8" cellspacing="8"  align="center">
 <tr>
 <td>
 WEEK-01
 
 <ul>
-<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-01/day-1">Day 1</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-01/day-2">Day 2</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-01/day-3">Day 3</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-01/day-4">Day 4</a></li>
@@ -37,6 +36,7 @@ WEEK-03
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-03/day-3">Day 3</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-03/day-4">Day 4</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-03/day-5">Day 5</a></li>
+<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-03/calc">CLI Calculator</a></li>
 </ul>
 
 </td>
@@ -50,6 +50,7 @@ WEEK-04
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-04/day-3">Day 3</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-04/day-4">Day 4</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-04/day-5">Day 5</a></li>
+<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-04/todoapp">TODO App in C</a></li>
 </ul>
 
 </td>
@@ -60,7 +61,6 @@ WEEK-05
 <ul>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-05/day-1">Day 1</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-05/day-2">Day 2</a></li>
-<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-05/day-3">Day 3</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-05/day-4">Day 4</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-05/day-5">Day 5</a></li>
 </ul>
@@ -76,6 +76,7 @@ WEEK-06
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-06/day-3">Day 3</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-06/day-4">Day 4</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-06/day-5">Day 5</a></li>
+<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-06/todoapp">TODO App in C++</a></li>
 </ul>
 
 </td>
@@ -85,10 +86,8 @@ WEEK-07
 
 <ul>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-07/day-1">Day 1</a></li>
-<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-07/day-2">Day 2</a></li>
 <li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-07/day-3">Day 3</a></li>
-<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-07/day-4">Day 4</a></li>
-<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-07/day-5">Day 5</a></li>
+<li><a href="https://github.com/greenfox-academy/S7ubbHuN/tree/master/week-07/templogger/templogger">Temperature logger</a></li>
 </ul>
 
 </td>
