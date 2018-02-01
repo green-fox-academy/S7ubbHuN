@@ -70,3 +70,9 @@
 </tr>
 </tbody>
 </table>
+
+# Code collection for final exam
+
+>1. [RGB LED](https://github.com/greenfox-academy/huli-smarthome-device-static-fuchsit/blob/development/common/rgb_led_color/Src/rgb_led_color.c)
+>2. [AirCondi](https://github.com/greenfox-academy/huli-smarthome-device-static-fuchsit/blob/development/common/fan_control/Src/aircondi.c)
+>3. [Main](https://github.com/greenfox-academy/huli-smarthome-device-static-fuchsit/blob/development/example-project/Src/main.c)
