@@ -16,6 +16,7 @@ int main() {
     scanf("%d", &first_element);
     printf("Enter the last element of the array:");
     scanf("%d", &last_element);
+
     unsigned int arrsize = (last_element - first_element) + 1;
     int array[arrsize];
 
@@ -24,8 +25,10 @@ int main() {
         sum += array[i];
         i++;
     }
+
     average = (float)sum / (float)arrsize;
     nearest = array[0];
+
     for (i = 1; i < arrsize; i++) {
         if ( fabs (average - array[i]) < fabs (average - nearest)) {
             nearest = array[i];
@@ -33,9 +36,6 @@ int main() {
     }
     printf("The average of the array is: %.2f\n", average);
     printf("The nearest number to the average is: %d\n", nearest);
-
-
-
 
     return 0;
 }
